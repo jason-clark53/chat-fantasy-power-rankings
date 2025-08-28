@@ -26,10 +26,10 @@ jobs:
           test -n "${YEAR}" || (echo "YEAR env is empty" && exit 1)
           python pull.py
         env:
-          LEAGUE_ID: "63426"                # <- your league id (keep as string)
-          YEAR: ${{ secrets.YEAR }}         # or "2025"
-          ESPN_S2: ${{ secrets.ESPN_S2 }}   # omit if public
-          SWID: ${{ secrets.SWID }}         # omit if public
+          LEAGUE_ID: ${{ secrets.LEAGUE_ID }}   # <- your league id (keep as string)
+          YEAR: ${{ secrets.YEAR }}             # or "2025"
+          ESPN_S2: ${{ secrets.ESPN_S2 }}       # omit if public
+          SWID: ${{ secrets.SWID }}             # omit if public
 
       - name: Upload artifacts
         if: always()
