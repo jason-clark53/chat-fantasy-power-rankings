@@ -1,0 +1,30 @@
+name: Weekly ESPN Pull
+on:
+  schedule:
+    # GitHub cron uses UTC. 11:00 UTC = 7:00 AM America/Detroit (EDT).
+    - cron: "0 11 * * 2"   # Tuesdays 7:00 AM ET
+  workflow_dispatch: {}    # allow manual run
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements.txt
+      - name: Pull ESPN data
+        run: python pull.py
+        env:
+          LEAGUE_ID: ${{ secrets.LEAGUE_ID }}
+          YEAR: ${{ secrets.YEAR }}
+          ESPN_S2: ${{ secrets.ESPN_S2 }}   # leave unset if public league
+          SWID: ${{ secrets.SWID }}         # leave unset if public league
+      - name: Commit artifacts
+        run: |
+          git config user.name "espn-bot"
+          git config user.email "espn-bot@users.noreply.github.com"
+          git add out/
+          git commit -m "Auto: week update" || echo "No changes to commit"
+          git push
