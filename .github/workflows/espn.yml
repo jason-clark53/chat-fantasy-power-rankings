@@ -1,37 +1,48 @@
 name: Weekly ESPN Pull
 on:
   schedule:
-    # GitHub cron uses UTC. 11:00 UTC = 7:00 AM America/Detroit (EDT).
-    - cron: "0 11 * * 2"   # Tuesdays 7:00 AM ET
-  workflow_dispatch: {}    # allow manual run
+    - cron: "0 11 * * 2"   # Tuesdays 7:00 AM America/Detroit (ET)
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
 
 jobs:
   run:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
       - run: pip install -r requirements.txt
-      
-      - name: Sanity check env (won't print secret values)
-        run: |
-          test -n "${{ secrets.LEAGUE_ID }}" || (echo "Missing LEAGUE_ID secret" && exit 1)
-          echo "YEAR present? ${{ secrets.YEAR != '' }}"
-          echo "Cookies present? ESPN_S2=$([[ -n '${{ secrets.ESPN_S2 }}' ]] && echo yes || echo no), SWID=$([[ -n '${{ secrets.SWID }}' ]] && echo yes || echo no)"
 
+      # ✅ Check ENV (since LEAGUE_ID is hard-coded below in the same step)
       - name: Pull ESPN data
-        run: python pull.py
+        run: |
+          test -n "${LEAGUE_ID}" || (echo "LEAGUE_ID env is empty" && exit 1)
+          test -n "${YEAR}" || (echo "YEAR env is empty" && exit 1)
+          python pull.py
         env:
-          LEAGUE_ID: 63426
-          YEAR: ${{ secrets.YEAR }}
-          ESPN_S2: ${{ secrets.ESPN_S2 }}   # leave unset if public league
-          SWID: ${{ secrets.SWID }}         # leave unset if public league
+          LEAGUE_ID: "63426"                # <- your league id (keep as string)
+          YEAR: ${{ secrets.YEAR }}         # or "2025"
+          ESPN_S2: ${{ secrets.ESPN_S2 }}   # omit if public
+          SWID: ${{ secrets.SWID }}         # omit if public
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: out
+          path: out/
+
       - name: Commit artifacts
         run: |
           git config user.name "espn-bot"
           git config user.email "espn-bot@users.noreply.github.com"
-          git add out/
+          git add out/ || true
           git commit -m "Auto: week update" || echo "No changes to commit"
-          git push
+          git push || echo "Push failed (likely no changes or permissions)"
+
