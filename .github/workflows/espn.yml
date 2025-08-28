@@ -14,6 +14,7 @@ jobs:
         with:
           python-version: "3.11"
       - run: pip install -r requirements.txt
+      
       - name: Sanity check env (won't print secret values)
         run: |
           test -n "${{ secrets.LEAGUE_ID }}" || (echo "Missing LEAGUE_ID secret" && exit 1)
@@ -23,7 +24,7 @@ jobs:
       - name: Pull ESPN data
         run: python pull.py
         env:
-          LEAGUE_ID: ${{ secrets.LEAGUE_ID }}
+          LEAGUE_ID: 63426
           YEAR: ${{ secrets.YEAR }}
           ESPN_S2: ${{ secrets.ESPN_S2 }}   # leave unset if public league
           SWID: ${{ secrets.SWID }}         # leave unset if public league
