@@ -1,119 +1,219 @@
-import os, json, datetime as dt
-import pandas as pd
+import os, sys, json, datetime as dt
+from statistics import pstdev
 from espn_api.football import League
 
-LEAGUE_ID = int(os.getenv("LEAGUE_ID"))
-YEAR = int(os.getenv("YEAR", "2025"))
-ESPN_S2 = os.getenv("ESPN_S2") or None
-SWID = os.getenv("SWID") or None
+# ---------- Env & guards ----------
+LEAGUE_ID = os.getenv("LEAGUE_ID")
+YEAR = os.getenv("YEAR", "2025")
 
-league = League(league_id=LEAGUE_ID, year=YEAR, espn_s2=ESPN_S2, swid=SWID)
+if not LEAGUE_ID or not LEAGUE_ID.strip():
+    sys.exit("ERROR: LEAGUE_ID is empty. Provide it via env (GitHub secret or step env).")
+try:
+    LEAGUE_ID = int(LEAGUE_ID)
+    YEAR = int(YEAR)
+except ValueError:
+    sys.exit("ERROR: LEAGUE_ID and YEAR must be integers.")
 
-# --- determine last "completed" week robustly
+ESPN_S2 = os.getenv("ESPN_S2") or None  # only needed for private leagues
+SWID    = os.getenv("SWID") or None
+
+# ---------- League init ----------
+try:
+    league = League(league_id=LEAGUE_ID, year=YEAR, espn_s2=ESPN_S2, swid=SWID)
+except Exception as e:
+    sys.exit(f"ERROR: Could not initialize League. Check LEAGUE_ID/YEAR and cookies. Details: {e}")
+
+# ---------- Helpers ----------
 def last_completed_week():
-    # Try weeks 1..18 and pick the max that has at least one decided game
-    last_done = 1
-    for wk in range(1, 19):
+    """Pick the highest week that has at least one decided matchup."""
+    last_done = 0
+    # ESPN rarely goes past 18 weeks for fantasy, but iterate generously.
+    for wk in range(1, 21):
         try:
             games = league.scoreboard(week=wk)
         except Exception:
             continue
         if games and any(getattr(g, "winner", None) is not None for g in games):
             last_done = wk
-    return last_done
+    return last_done or 1
 
+def mean_last_n(values, n):
+    if not values:
+        return 0.0
+    tail = values[-n:] if len(values) >= n else values
+    return sum(tail) / len(tail)
+
+def safe_std(values):
+    return 0.0 if len(values) < 2 else pstdev(values)
+
+# ---------- Determine week & pull boards ----------
 week = last_completed_week()
+scoreboard_this_week = league.scoreboard(week=week)
 
-# --- standings snapshot
-stand_rows = []
-for t in league.teams:
-    stand_rows.append({
-        "team": t.team_name,
+# ---------- League settings (Option A via espn_api) ----------
+s = getattr(league, "settings", None)
+
+settings = {
+    # Names
+    "league_name": getattr(s, "name", None) or getattr(league, "league_name", None),
+    # Structure
+    "team_count": getattr(s, "team_count", None),
+    "division_count": getattr(s, "division_count", None) if hasattr(s, "division_count") else None,
+    "has_divisions": bool(getattr(s, "divisions", None)) if hasattr(s, "divisions") else None,
+    # Scoring
+    "scoring_type": getattr(s, "scoring_type", None),               # e.g., "PPR", "STANDARD"
+    "decimal_scoring": getattr(s, "decimal_scoring", None),
+    # Schedule / Playoffs
+    "regular_season_matchup_count": getattr(s, "regular_season_matchup_count", None),
+    "matchup_period_count": getattr(s, "matchup_period_count", None),  # often same as reg-season weeks
+    "playoff_team_count": getattr(s, "playoff_team_count", None),
+    "playoff_matchup_period_length": getattr(s, "playoff_matchup_period_length", None),
+    "playoff_seed_rule": getattr(s, "playoff_seed_rule", None),
+    # Transactions (handy context)
+    "waiver_type": getattr(s, "waiver_type", None),
+    "trade_deadline": getattr(s, "trade_deadline", None),
+}
+
+# ---------- Team-level aggregates ----------
+teams = league.teams
+team_names = [t.team_name for t in teams]
+
+# Total PF/PA to date
+pf_tot = {t.team_name: float(getattr(t, "points_for", 0.0)) for t in teams}
+pa_tot = {t.team_name: float(getattr(t, "points_against", 0.0)) for t in teams}
+
+# Build weekly points per team up through the completed week
+weekly_points = {name: [] for name in team_names}
+for wk in range(1, week + 1):
+    for g in league.scoreboard(week=wk):
+        weekly_points[g.home_team.team_name].append(float(g.home_score))
+        weekly_points[g.away_team.team_name].append(float(g.away_score))
+
+# Opponents faced (for simple SoS)
+opponents_by_team = {name: [] for name in team_names}
+for wk in range(1, week + 1):
+    for g in league.scoreboard(week=wk):
+        hn, an = g.home_team.team_name, g.away_team.team_name
+        opponents_by_team[hn].append(an)
+        opponents_by_team[an].append(hn)
+
+# Strength of Schedule = average opponent PF (to date)
+sos_avg = {}
+for name, opps in opponents_by_team.items():
+    if opps:
+        sos_avg[name] = sum(pf_tot.get(o, 0.0) for o in opps) / len(opps)
+    else:
+        sos_avg[name] = 0.0
+
+# One-score game record (<= 10 pts margin)
+one_score = {name: {"wins": 0, "losses": 0} for name in team_names}
+for wk in range(1, week + 1):
+    for g in league.scoreboard(week=wk):
+        margin = abs(g.home_score - g.away_score)
+        if margin <= 10:
+            winner = g.home_team.team_name if g.home_score > g.away_score else g.away_team.team_name
+            loser  = g.away_team.team_name if winner == g.home_team.team_name else g.home_team.team_name
+            one_score[winner]["wins"]  += 1
+            one_score[loser]["losses"] += 1
+
+# PF ranks for head-to-head vs top/bottom
+pf_sorted = sorted(pf_tot.items(), key=lambda x: x[1], reverse=True)
+top5 = set([n for n, _ in pf_sorted[:5]])
+bottom5 = set([n for n, _ in pf_sorted[-5:]]) if len(pf_sorted) >= 5 else set()
+
+def h2h_vs_groups(team_name):
+    vtop = vbot = 0
+    for wk in range(1, week + 1):
+        for g in league.scoreboard(week=wk):
+            if team_name not in (g.home_team.team_name, g.away_team.team_name):
+                continue
+            opp = g.away_team.team_name if team_name == g.home_team.team_name else g.home_team.team_name
+            won = ((g.home_score > g.away_score and team_name == g.home_team.team_name) or
+                   (g.away_score > g.home_score and team_name == g.away_team.team_name))
+            if won and opp in top5:
+                vtop += 1
+            if won and opp in bottom5:
+                vbot += 1
+    return {"vs_top5_wins": vtop, "vs_bottom5_wins": vbot}
+
+# Build teams payload
+teams_payload = []
+for t in teams:
+    name = t.team_name
+    wp = weekly_points[name]
+    teams_payload.append({
+        "name": name,
         "owner": getattr(t, "owner", None),
-        "wins": t.wins, "losses": t.losses, "ties": getattr(t, "ties", 0),
-        "points_for": round(t.points_for, 2),
-        "points_against": round(t.points_against, 2),
+        "record": {
+            "wins": int(getattr(t, "wins", 0)),
+            "losses": int(getattr(t, "losses", 0)),
+            "ties": int(getattr(t, "ties", 0)) if hasattr(t, "ties") else 0
+        },
+        "points_for_total": round(pf_tot[name], 2),
+        "points_against_total": round(pa_tot[name], 2),
+        "weekly_points": [round(x, 2) for x in wp],
+        "recent_avg_last3": round(mean_last_n(wp, 3), 2),
+        "stddev_points": round(safe_std(wp), 2),
+        "sos_avg_opponent_pf": round(sos_avg[name], 2),
+        "close_games": {
+            "one_score_wins": one_score[name]["wins"],
+            "one_score_losses": one_score[name]["losses"]
+        },
+        "head_to_head": h2h_vs_groups(name),
+        "notes": ""
     })
-stand = pd.DataFrame(stand_rows).sort_values(
-    ["wins", "points_for", "points_against"], ascending=[False, False, True]
-).reset_index(drop=True)
-stand["rank"] = stand.index + 1
 
-# --- weekly games
-games = []
-scoreboard = league.scoreboard(week=week)
-for g in scoreboard:
-    games.append({
+# ---------- This week’s games ----------
+games_payload = []
+for g in scoreboard_this_week:
+    margin = abs(g.home_score - g.away_score)
+    games_payload.append({
         "week": week,
         "home": g.home_team.team_name,
-        "home_score": round(g.home_score, 2),
+        "home_score": round(float(g.home_score), 2),
         "away": g.away_team.team_name,
-        "away_score": round(g.away_score, 2),
-        "winner": (g.home_team.team_name if g.home_score > g.away_score
-                   else g.away_team.team_name)
+        "away_score": round(float(g.away_score), 2),
+        "winner": g.home_team.team_name if g.home_score > g.away_score else g.away_team.team_name,
+        "margin": round(float(margin), 2)
     })
-games_df = pd.DataFrame(games)
 
-# --- superlatives (basic, tweak later as you like)
-if not games_df.empty:
-    games_df["margin"] = (games_df["home_score"] - games_df["away_score"]).abs()
-    closest = games_df.loc[games_df["margin"].idxmin()].to_dict()
-    high_game = games_df.loc[games_df[["home_score","away_score"]].max(axis=1).idxmax()].to_dict()
+# ---------- Derived summary ----------
+derived = {}
+if games_payload:
+    closest = min(games_payload, key=lambda x: x["margin"])
+    # highest single team score in the week
+    single_scores = []
+    for m in games_payload:
+        single_scores.append((m["home"], m["home_score"]))
+        single_scores.append((m["away"], m["away_score"]))
+    top_team = max(single_scores, key=lambda x: x[1])
+    league_pf_avg = 0.0
+    total_scores_sum = sum(sum(v) for v in weekly_points.values())
+    if week > 0 and len(team_names) > 0:
+        league_pf_avg = total_scores_sum / (len(team_names) * week)
 
-    # Determine team of the week by highest individual team score
-    tot = []
-    for _, r in games_df.iterrows():
-        tot.append((r["home"], r["home_score"]))
-        tot.append((r["away"], r["away_score"]))
-    team_of_week = max(tot, key=lambda x: x[1])
+    derived = {
+        "closest_game": closest,
+        "highest_single_team_score": {"team": top_team[0], "points": round(top_team[1], 2)},
+        "league_pf_avg_to_date": round(league_pf_avg, 2)
+    }
 
-else:
-    closest, high_game, team_of_week = {}, {}, ("", 0.0)
+# ---------- Final JSON bundle ----------
+bundle = {
+    "meta": {
+        "generated_at_utc": dt.datetime.utcnow().isoformat(timespec="seconds") + "Z",
+        "season_year": YEAR,
+        "week_completed": week,
+        "source": "espn_api"
+    },
+    "settings": settings,
+    "teams": teams_payload,
+    "games_this_week": games_payload,
+    "derived": derived
+}
 
-# --- save artifacts
+# ---------- Save ----------
 os.makedirs("out", exist_ok=True)
-stand.to_csv(f"out/standings.csv", index=False)
-games_df.to_csv(f"out/games_week_{week}.csv", index=False)
-with open("out/meta.json","w") as f:
-    json.dump({"week": week, "generated_at_utc": dt.datetime.utcnow().isoformat()}, f, indent=2)
-
-# --- quick auto-article (Markdown)
-def narrative():
-    if games_df.empty:
-        return "Quiet week (no completed games yet)."
-    c = closest
-    return (
-        f"Week {week} delivered drama: the closest game was **{c.get('home')} vs {c.get('away')}** "
-        f"separated by **{c.get('margin'):.2f}**. "
-        f"**{team_of_week[0]}** posted the week’s top score at **{team_of_week[1]:.2f}**."
-    )
-
-lines = []
-lines.append(f"# 🏈 Week {week} Power Rankings")
-lines.append("")
-lines.append(f"_{dt.datetime.utcnow().strftime('%B %d, %Y')} (auto-generated)_")
-lines.append("")
-lines.append(f"**Lead Story:** {narrative()}")
-lines.append("")
-lines.append("## Rankings")
-for _, r in stand.sort_values('rank').iterrows():
-    rec = f"{int(r.wins)}-{int(r.losses)}" + (f"-{int(r.ties)}" if int(r.ties) else "")
-    lines.append(f"**{int(r['rank'])}. {r['team']} ({rec})** — PF: {r.points_for:.2f}, PA: {r.points_against:.2f}")
-lines.append("")
-if not games_df.empty:
-    lines.append("## Superlatives")
-    lines.append(f"- **Team of the Week:** {team_of_week[0]} ({team_of_week[1]:.2f})")
-    lines.append(f"- **Closest Game:** {closest['home']} {closest['home_score']} – {closest['away']} {closest['away_score']} (Δ {closest['margin']:.2f})")
-
-article_md = "\n".join(lines)
-with open(f"out/power_rankings_week_{week}.md","w", encoding="utf-8") as f:
-    f.write(article_md)
-
-# --- image prompt suggestion (for your weekly custom graphic)
-prompt = (
-    f"Fantasy football Week {week}: feature the top team '{stand.iloc[0]['team']}' celebrating; "
-    f"include a scoreboard hint of closest game margin ~{closest.get('margin', 6):.1f}."
-)
-with open(f"out/image_prompt_week_{week}.txt","w", encoding="utf-8") as f:
-    f.write(prompt)
-print(f"Generated week {week} artifacts in /out")
+with open("out/llm_input.json", "w", encoding="utf-8") as f:
+    json.dump(bundle, f, indent=2)
+print("Wrote out/llm_input.json")
