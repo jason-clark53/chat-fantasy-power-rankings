@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at_utc": "2025-08-29T00:55:30Z",
-    "season_year": 2024,
+    "generated_at_utc": "2025-08-29T00:58:20Z",
+    "season_year": 2025,
     "week_completed": 1,
     "source": "espn_api"
   },
@@ -18,28 +18,28 @@
     "playoff_matchup_period_length": 1,
     "playoff_seed_rule": null,
     "waiver_type": null,
-    "trade_deadline": 1732554000000
+    "trade_deadline": 1764003600000
   },
   "teams": [
     {
       "name": "The Union Strikes Back",
       "owner": null,
       "record": {
-        "wins": 8,
-        "losses": 6,
+        "wins": 0,
+        "losses": 0,
         "ties": 0
       },
-      "points_for_total": 1643.82,
-      "points_against_total": 1664.4,
+      "points_for_total": 0.0,
+      "points_against_total": 0.0,
       "weekly_points": [
-        131.02
+        0.0
       ],
-      "recent_avg_last3": 131.02,
+      "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
-      "sos_avg_opponent_pf": 1528.32,
+      "sos_avg_opponent_pf": 0.0,
       "close_games": {
         "one_score_wins": 0,
-        "one_score_losses": 0
+        "one_score_losses": 1
       },
       "head_to_head": {
         "vs_top5_wins": 0,
@@ -51,20 +51,20 @@
       "name": "Koo Koo's Nest",
       "owner": null,
       "record": {
-        "wins": 6,
-        "losses": 8,
+        "wins": 0,
+        "losses": 0,
         "ties": 0
       },
-      "points_for_total": 1528.32,
-      "points_against_total": 1561.26,
+      "points_for_total": 0.0,
+      "points_against_total": 0.0,
       "weekly_points": [
-        102.16
+        0.0
       ],
-      "recent_avg_last3": 102.16,
+      "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
-      "sos_avg_opponent_pf": 1643.82,
+      "sos_avg_opponent_pf": 0.0,
       "close_games": {
-        "one_score_wins": 0,
+        "one_score_wins": 1,
         "one_score_losses": 0
       },
       "head_to_head": {
@@ -77,20 +77,20 @@
       "name": "J-man\u2019s team",
       "owner": null,
       "record": {
-        "wins": 6,
-        "losses": 8,
+        "wins": 0,
+        "losses": 0,
         "ties": 0
       },
-      "points_for_total": 1353.74,
-      "points_against_total": 1504.44,
+      "points_for_total": 0.0,
+      "points_against_total": 0.0,
       "weekly_points": [
-        84.44
+        0.0
       ],
-      "recent_avg_last3": 84.44,
+      "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
-      "sos_avg_opponent_pf": 1271.02,
+      "sos_avg_opponent_pf": 0.0,
       "close_games": {
-        "one_score_wins": 0,
+        "one_score_wins": 1,
         "one_score_losses": 0
       },
       "head_to_head": {
@@ -103,21 +103,21 @@
       "name": "Home Team",
       "owner": null,
       "record": {
-        "wins": 8,
-        "losses": 6,
+        "wins": 0,
+        "losses": 0,
         "ties": 0
       },
-      "points_for_total": 1739.6,
-      "points_against_total": 1548.3,
+      "points_for_total": 0.0,
+      "points_against_total": 0.0,
       "weekly_points": [
-        96.18
+        0.0
       ],
-      "recent_avg_last3": 96.18,
+      "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
-      "sos_avg_opponent_pf": 1628.6,
+      "sos_avg_opponent_pf": 0.0,
       "close_games": {
-        "one_score_wins": 0,
-        "one_score_losses": 1
+        "one_score_wins": 1,
+        "one_score_losses": 0
       },
       "head_to_head": {
         "vs_top5_wins": 0,
@@ -129,20 +129,20 @@
       "name": "For McCaffrey",
       "owner": null,
       "record": {
-        "wins": 8,
-        "losses": 6,
+        "wins": 0,
+        "losses": 0,
         "ties": 0
       },
-      "points_for_total": 1651.1,
-      "points_against_total": 1574.86,
+      "points_for_total": 0.0,
+      "points_against_total": 0.0,
       "weekly_points": [
-        157.78
+        0.0
       ],
-      "recent_avg_last3": 157.78,
+      "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
-      "sos_avg_opponent_pf": 1594.04,
+      "sos_avg_opponent_pf": 0.0,
       "close_games": {
-        "one_score_wins": 0,
+        "one_score_wins": 1,
         "one_score_losses": 0
       },
       "head_to_head": {
@@ -155,25 +155,25 @@
       "name": "Team Hairy",
       "owner": null,
       "record": {
-        "wins": 11,
-        "losses": 3,
+        "wins": 0,
+        "losses": 0,
         "ties": 0
       },
-      "points_for_total": 1612.04,
-      "points_against_total": 1413.76,
+      "points_for_total": 0.0,
+      "points_against_total": 0.0,
       "weekly_points": [
-        116.32
+        0.0
       ],
-      "recent_avg_last3": 116.32,
+      "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
-      "sos_avg_opponent_pf": 1492.42,
+      "sos_avg_opponent_pf": 0.0,
       "close_games": {
         "one_score_wins": 0,
-        "one_score_losses": 0
+        "one_score_losses": 1
       },
       "head_to_head": {
         "vs_top5_wins": 0,
-        "vs_bottom5_wins": 1
+        "vs_bottom5_wins": 0
       },
       "notes": ""
     },
@@ -181,25 +181,25 @@
       "name": "Go Go Gators",
       "owner": null,
       "record": {
-        "wins": 8,
-        "losses": 6,
+        "wins": 0,
+        "losses": 0,
         "ties": 0
       },
-      "points_for_total": 1654.3,
-      "points_against_total": 1512.98,
+      "points_for_total": 0.0,
+      "points_against_total": 0.0,
       "weekly_points": [
-        126.64
+        0.0
       ],
-      "recent_avg_last3": 126.64,
+      "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
-      "sos_avg_opponent_pf": 1429.46,
+      "sos_avg_opponent_pf": 0.0,
       "close_games": {
-        "one_score_wins": 0,
+        "one_score_wins": 1,
         "one_score_losses": 0
       },
       "head_to_head": {
         "vs_top5_wins": 0,
-        "vs_bottom5_wins": 1
+        "vs_bottom5_wins": 0
       },
       "notes": ""
     },
@@ -207,18 +207,18 @@
       "name": "Ragnar the Spoiled",
       "owner": null,
       "record": {
-        "wins": 8,
-        "losses": 6,
+        "wins": 0,
+        "losses": 0,
         "ties": 0
       },
-      "points_for_total": 1641.66,
-      "points_against_total": 1485.04,
+      "points_for_total": 0.0,
+      "points_against_total": 0.0,
       "weekly_points": [
-        101.82
+        0.0
       ],
-      "recent_avg_last3": 101.82,
+      "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
-      "sos_avg_opponent_pf": 1293.28,
+      "sos_avg_opponent_pf": 0.0,
       "close_games": {
         "one_score_wins": 0,
         "one_score_losses": 1
@@ -233,47 +233,47 @@
       "name": "Anzalone Hair Jealousy",
       "owner": null,
       "record": {
-        "wins": 6,
-        "losses": 8,
+        "wins": 0,
+        "losses": 0,
         "ties": 0
       },
-      "points_for_total": 1293.28,
-      "points_against_total": 1443.16,
+      "points_for_total": 0.0,
+      "points_against_total": 0.0,
       "weekly_points": [
-        102.28
+        0.0
       ],
-      "recent_avg_last3": 102.28,
+      "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
-      "sos_avg_opponent_pf": 1641.66,
+      "sos_avg_opponent_pf": 0.0,
       "close_games": {
         "one_score_wins": 1,
         "one_score_losses": 0
       },
       "head_to_head": {
-        "vs_top5_wins": 1,
+        "vs_top5_wins": 0,
         "vs_bottom5_wins": 0
       },
       "notes": ""
     },
     {
-      "name": "The Separatists Rise Again ",
+      "name": "The Separatists Rise Again",
       "owner": null,
       "record": {
-        "wins": 7,
-        "losses": 7,
+        "wins": 0,
+        "losses": 0,
         "ties": 0
       },
-      "points_for_total": 1594.04,
-      "points_against_total": 1565.44,
+      "points_for_total": 0.0,
+      "points_against_total": 0.0,
       "weekly_points": [
-        120.56
+        0.0
       ],
-      "recent_avg_last3": 120.56,
+      "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
-      "sos_avg_opponent_pf": 1651.1,
+      "sos_avg_opponent_pf": 0.0,
       "close_games": {
         "one_score_wins": 0,
-        "one_score_losses": 0
+        "one_score_losses": 1
       },
       "head_to_head": {
         "vs_top5_wins": 0,
@@ -285,25 +285,25 @@
       "name": "Toddler Energy ",
       "owner": null,
       "record": {
-        "wins": 2,
-        "losses": 12,
+        "wins": 0,
+        "losses": 0,
         "ties": 0
       },
-      "points_for_total": 1271.02,
-      "points_against_total": 1593.62,
+      "points_for_total": 0.0,
+      "points_against_total": 0.0,
       "weekly_points": [
-        98.88
+        0.0
       ],
-      "recent_avg_last3": 98.88,
+      "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
-      "sos_avg_opponent_pf": 1353.74,
+      "sos_avg_opponent_pf": 0.0,
       "close_games": {
         "one_score_wins": 0,
-        "one_score_losses": 0
+        "one_score_losses": 1
       },
       "head_to_head": {
         "vs_top5_wins": 0,
-        "vs_bottom5_wins": 1
+        "vs_bottom5_wins": 0
       },
       "notes": ""
     },
@@ -311,24 +311,24 @@
       "name": "HallOfBass",
       "owner": null,
       "record": {
-        "wins": 10,
-        "losses": 4,
+        "wins": 0,
+        "losses": 0,
         "ties": 0
       },
-      "points_for_total": 1628.6,
-      "points_against_total": 1469.2,
+      "points_for_total": 0.0,
+      "points_against_total": 0.0,
       "weekly_points": [
-        103.16
+        0.0
       ],
-      "recent_avg_last3": 103.16,
+      "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
-      "sos_avg_opponent_pf": 1739.6,
+      "sos_avg_opponent_pf": 0.0,
       "close_games": {
-        "one_score_wins": 1,
-        "one_score_losses": 0
+        "one_score_wins": 0,
+        "one_score_losses": 1
       },
       "head_to_head": {
-        "vs_top5_wins": 1,
+        "vs_top5_wins": 0,
         "vs_bottom5_wins": 0
       },
       "notes": ""
@@ -337,20 +337,20 @@
       "name": "Team Kolb",
       "owner": null,
       "record": {
-        "wins": 6,
-        "losses": 8,
+        "wins": 0,
+        "losses": 0,
         "ties": 0
       },
-      "points_for_total": 1492.42,
-      "points_against_total": 1593.12,
+      "points_for_total": 0.0,
+      "points_against_total": 0.0,
       "weekly_points": [
-        81.66
+        0.0
       ],
-      "recent_avg_last3": 81.66,
+      "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
-      "sos_avg_opponent_pf": 1612.04,
+      "sos_avg_opponent_pf": 0.0,
       "close_games": {
-        "one_score_wins": 0,
+        "one_score_wins": 1,
         "one_score_losses": 0
       },
       "head_to_head": {
@@ -363,21 +363,21 @@
       "name": "Thirst Down and 10",
       "owner": null,
       "record": {
-        "wins": 4,
-        "losses": 10,
+        "wins": 0,
+        "losses": 0,
         "ties": 0
       },
-      "points_for_total": 1429.46,
-      "points_against_total": 1603.82,
+      "points_for_total": 0.0,
+      "points_against_total": 0.0,
       "weekly_points": [
-        114.8
+        0.0
       ],
-      "recent_avg_last3": 114.8,
+      "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
-      "sos_avg_opponent_pf": 1654.3,
+      "sos_avg_opponent_pf": 0.0,
       "close_games": {
         "one_score_wins": 0,
-        "one_score_losses": 0
+        "one_score_losses": 1
       },
       "head_to_head": {
         "vs_top5_wins": 0,
@@ -390,81 +390,81 @@
     {
       "week": 1,
       "home": "The Union Strikes Back",
-      "home_score": 131.02,
+      "home_score": 0.0,
       "away": "Koo Koo's Nest",
-      "away_score": 102.16,
-      "winner": "The Union Strikes Back",
-      "margin": 28.86
+      "away_score": 0.0,
+      "winner": "Koo Koo's Nest",
+      "margin": 0.0
     },
     {
       "week": 1,
       "home": "HallOfBass",
-      "home_score": 103.16,
+      "home_score": 0.0,
       "away": "Home Team",
-      "away_score": 96.18,
-      "winner": "HallOfBass",
-      "margin": 6.98
+      "away_score": 0.0,
+      "winner": "Home Team",
+      "margin": 0.0
     },
     {
       "week": 1,
       "home": "Ragnar the Spoiled",
-      "home_score": 101.82,
+      "home_score": 0.0,
       "away": "Anzalone Hair Jealousy",
-      "away_score": 102.28,
+      "away_score": 0.0,
       "winner": "Anzalone Hair Jealousy",
-      "margin": 0.46
+      "margin": 0.0
     },
     {
       "week": 1,
       "home": "Thirst Down and 10",
-      "home_score": 114.8,
+      "home_score": 0.0,
       "away": "Go Go Gators",
-      "away_score": 126.64,
+      "away_score": 0.0,
       "winner": "Go Go Gators",
-      "margin": 11.84
+      "margin": 0.0
     },
     {
       "week": 1,
       "home": "Team Hairy",
-      "home_score": 116.32,
+      "home_score": 0.0,
       "away": "Team Kolb",
-      "away_score": 81.66,
-      "winner": "Team Hairy",
-      "margin": 34.66
+      "away_score": 0.0,
+      "winner": "Team Kolb",
+      "margin": 0.0
     },
     {
       "week": 1,
-      "home": "The Separatists Rise Again ",
-      "home_score": 120.56,
+      "home": "The Separatists Rise Again",
+      "home_score": 0.0,
       "away": "For McCaffrey",
-      "away_score": 157.78,
+      "away_score": 0.0,
       "winner": "For McCaffrey",
-      "margin": 37.22
+      "margin": 0.0
     },
     {
       "week": 1,
       "home": "Toddler Energy ",
-      "home_score": 98.88,
+      "home_score": 0.0,
       "away": "J-man\u2019s team",
-      "away_score": 84.44,
-      "winner": "Toddler Energy ",
-      "margin": 14.44
+      "away_score": 0.0,
+      "winner": "J-man\u2019s team",
+      "margin": 0.0
     }
   ],
   "derived": {
     "closest_game": {
       "week": 1,
-      "home": "Ragnar the Spoiled",
-      "home_score": 101.82,
-      "away": "Anzalone Hair Jealousy",
-      "away_score": 102.28,
-      "winner": "Anzalone Hair Jealousy",
-      "margin": 0.46
+      "home": "The Union Strikes Back",
+      "home_score": 0.0,
+      "away": "Koo Koo's Nest",
+      "away_score": 0.0,
+      "winner": "Koo Koo's Nest",
+      "margin": 0.0
     },
     "highest_single_team_score": {
-      "team": "For McCaffrey",
-      "points": 157.78
+      "team": "The Union Strikes Back",
+      "points": 0.0
     },
-    "league_pf_avg_to_date": 109.84
+    "league_pf_avg_to_date": 0.0
   }
 }
