@@ -46,6 +46,35 @@ def mean_last_n(values, n):
 def safe_std(values):
     return 0.0 if len(values) < 2 else pstdev(values)
 
+def player_row(p):
+    """Normalize player fields; handles missing attrs safely."""
+    # Common attrs exposed by espn_api Player in football box scores
+    name = getattr(p, "name", None)
+    pos = getattr(p, "position", None)               # e.g., RB
+    slot = getattr(p, "slot_position", None)         # e.g., RB, WR, BEN, FLEX
+    nfl = getattr(p, "proTeam", None)                # e.g., DAL
+    proj = getattr(p, "projected_points", None)
+    pts  = getattr(p, "points", None)
+    inj  = getattr(p, "injuryStatus", None) if hasattr(p, "injuryStatus") else None
+    # Some espn_api versions expose 'injuryStatus' or similar under 'injuryStatus'/'injuryStatusDetail'
+    return {
+        "name": name,
+        "position": pos,
+        "lineup_slot": slot,
+        "nfl_team": nfl,
+        "projected_points": round(float(proj), 2) if isinstance(proj, (int, float)) else None,
+        "actual_points": round(float(pts), 2) if isinstance(pts, (int, float)) else None,
+        "injury_status": inj
+    }
+
+def lineup_block(box, home=True):
+    team = box.home_team if home else box.away_team
+    lineup = box.home_lineup if home else box.away_lineup
+    return {
+        "team": team.team_name,
+        "players": [player_row(p) for p in lineup]
+    }
+
 # ---------- Determine week & pull boards ----------
 week = last_completed_week()
 scoreboard_this_week = league.scoreboard(week=week)
@@ -53,6 +82,7 @@ scoreboard_this_week = league.scoreboard(week=week)
 # ---------- League settings (Option A via espn_api) ----------
 s = getattr(league, "settings", None)
 
+# ---------- League settings snapshot ----------
 settings = {
     # Names
     "league_name": getattr(s, "name", None) or getattr(league, "league_name", None),
