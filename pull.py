@@ -157,6 +157,23 @@ playoffs = {
     "playoffByeCount":               schedule_raw.get("playoffByeCount"),     # may be absent; OK if None
 }
 
+# ---------- League settings snapshot ----------
+settings = {
+    "league_name": getattr(s, "name", None) or getattr(league, "league_name", None),
+    "team_count": getattr(s, "team_count", None),
+    "division_count": getattr(s, "division_count", None) if hasattr(s, "division_count") else None,
+    "has_divisions": bool(getattr(s, "divisions", None)) if hasattr(s, "divisions") else None,
+    "scoring_type": getattr(s, "scoring_type", None),
+    "decimal_scoring": getattr(s, "decimal_scoring", None),
+    "regular_season_matchup_count": getattr(s, "regular_season_matchup_count", None),
+    "matchup_period_count": getattr(s, "matchup_period_count", None),
+    "playoff_team_count": getattr(s, "playoff_team_count", None),
+    "playoff_matchup_period_length": getattr(s, "playoff_matchup_period_length", None),
+    "playoff_seed_rule": getattr(s, "playoff_seed_rule", None),
+    "waiver_type": getattr(s, "waiver_type", None),
+    "trade_deadline": getattr(s, "trade_deadline", None),
+}
+
 # One consolidated configuration block (context for all math)
 config = {
     "scoring": {
