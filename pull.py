@@ -32,40 +32,48 @@ except Exception as e:
 
 s = getattr(league, "settings", None)
 
-# Shared HTTP bits for raw endpoints
+# --- ESPN-friendly headers & GET ---
+import random
+
 BASE = f"https://fantasy.espn.com/apis/v3/games/ffl/seasons/{YEAR}/segments/0/leagues/{LEAGUE_ID}"
 COOKIES = {}
 if ESPN_S2: COOKIES["espn_s2"] = ESPN_S2
 if SWID:    COOKIES["SWID"] = SWID
-HEADERS = {"User-Agent": "Mozilla/5.0 (cfg-pull/1.0)"}
 
-def GET(url, params=None, timeout=20):
-    """Resilient GET with cookies & small backoff."""
+COMMON_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (cfg-pull/1.1)",
+    "Accept": "application/json, text/plain, */*",
+    "Referer": f"https://fantasy.espn.com/football/league?leagueId={LEAGUE_ID}",
+    "x-fantasy-source": "kona-PWA",
+    "x-fantasy-platform": "kona-PWA",
+}
+
+def GET(url, params=None, timeout=25):
+    """Resilient GET with ESPN-friendly headers and cache-buster."""
+    if params is None: params = {}
+    params["_"] = str(random.randint(10**6, 10**7-1))
     for attempt in range(3):
         try:
-            r = requests.get(url, params=params, cookies=COOKIES, headers=HEADERS, timeout=timeout)
+            r = requests.get(url, params=params, cookies=COOKIES, headers=COMMON_HEADERS, timeout=timeout)
             if r.ok:
-                return r.json()
+                data = r.json()
+                if data not in ({}, [], None):
+                    return data
         except Exception:
             pass
-        time.sleep(0.5 * (attempt + 1))
+        time.sleep(0.6 * (attempt + 1))
     return {}
 
 def fetch_league_view(view):
-    # Try espn_api internal first
+    """Try espn_api internal first, then raw GET."""
     try:
         data = league._fetch_league(params={"view": view})
         if isinstance(data, dict) and data:
             return data
     except Exception:
         pass
-    # Fallback to raw HTTP
     return GET(BASE, params={"view": view})
 
-def fetch_players_view(params):
-    """Query /players endpoint (for FA/projections)."""
-    url = BASE.replace(f"/leagues/{LEAGUE_ID}", "/players")
-    return GET(url, params=params)
 
 # ================================
 # Helpers
@@ -117,6 +125,21 @@ raw_rosters    = fetch_league_view("mRoster")       # team rosters with slots/el
 raw_box        = fetch_league_view("mMatchup")      # per-week box (if you later want optimal lineups)
 raw_prosched   = fetch_league_view("proSchedule")   # NFL bye weeks
 raw_trans      = fetch_league_view("mTransactions2")  # recent transactions (best effort)
+
+def _short(v):
+    if isinstance(v, dict): return len(v.keys())
+    if isinstance(v, list): return len(v)
+    return int(bool(v))
+
+debug_views = {
+    "mSettings": _short(raw_settings),
+    "mStandings": _short(raw_standings),
+    "mTeam": _short(raw_teams),
+    "mSchedule": _short(raw_schedule),
+    "mRoster": _short(raw_rosters),
+    "proSchedule": _short(raw_prosched),
+}
+print("DEBUG view sizes:", debug_views)
 
 # Bound loops by actual length if present
 settings_raw = raw_settings.get("settings", {}) if isinstance(raw_settings, dict) else {}
@@ -327,35 +350,57 @@ except Exception:
 # ================================
 # Player projections (this week + ROS best-effort)
 # ================================
-# We’ll try league endpoint with view=kona_player_info for all active players in league context.
-# Also pull free agents separately below.
-def pull_kona_players(scoring_period_id=None, limit=250, start_index=0):
-    params = {"view": "kona_player_info"}
-    if scoring_period_id:
+# --- Players (projections/ownership) via X-Fantasy-Filter ---
+def players_post(filter_obj, scoring_period_id=None, start=0, limit=250):
+    """
+    Query /players with X-Fantasy-Filter (ESPN expects the filter in header).
+    We still use GET but include 'x-fantasy-filter'; ESPN accepts this.
+    """
+    url = BASE.replace(f"/leagues/{LEAGUE_ID}", "/players")
+    headers = dict(COMMON_HEADERS)
+    headers["Content-Type"] = "application/json"
+    headers["x-fantasy-filter"] = json.dumps(filter_obj)
+    params = {}
+    if scoring_period_id is not None:
         params["scoringPeriodId"] = scoring_period_id
-    # Pagination support
+    params["startIndex"] = start
     params["limit"] = limit
-    params["startIndex"] = start_index
-    return fetch_players_view(params)
 
-current_spid = season_calendar.get("currentScoringPeriodId")
-players_this_week = []
-if current_spid:
-    # Pull a few pages to cover most active players (starters + benches) in league
-    # ESPN returns mixed pools; we’ll just take the first ~500
-    page = 0
-    while page < 3:
-        data = pull_kona_players(scoring_period_id=current_spid, limit=250, start_index=page*250)
-        arr = data if isinstance(data, list) else []
-        if not arr:
-            break
-        players_this_week.extend(arr)
-        if len(arr) < 250:
-            break
-        page += 1
+    for attempt in range(3):
+        try:
+            r = requests.get(url, params=params, cookies=COOKIES, headers=headers, timeout=25)
+            if r.ok:
+                data = r.json()
+                if isinstance(data, list) and data:
+                    return data
+        except Exception:
+            pass
+        time.sleep(0.6 * (attempt + 1))
+    return []
 
-def simplify_kona(player_obj):
-    """Extract core projection / actual for this scoring period and season."""
+def fetch_players_kona_all(scoring_period_id, max_pages=3):
+    """Active players across ONTEAM/FA/WA with projections for this scoring period."""
+    filt = {
+        "players": {
+            "filterStatus": {"value": ["ONTEAM", "FA", "WA"]},
+            "filterSlotIds": {"value": list(LINEUP_SLOT_MAP.keys())},
+            "sortAppliedStatTotal": {"sortPriority": 1, "sortAsc": False, "value": scoring_period_id},
+            "filterRanksForScoringPeriodIds": {"value": [scoring_period_id]},
+            "filterRanksForRankTypes": {"value": ["STANDARD"]},
+            "filterRanksForSlotIds": {"value": [-1]},
+        }
+    }
+    out = []
+    for page in range(max_pages):
+        batch = players_post(filt, scoring_period_id=scoring_period_id, start=page*250, limit=250)
+        if not batch:
+            break
+        out.extend(batch)
+        if len(batch) < 250:
+            break
+    return out
+
+def simplify_kona(player_obj, current_spid):
     p = player_obj.get("player", {}) if isinstance(player_obj, dict) else {}
     info = {
         "id": p.get("id"),
@@ -363,161 +408,78 @@ def simplify_kona(player_obj):
         "defaultPositionId": p.get("defaultPositionId"),
         "defaultPosition": POS_ID_MAP.get(p.get("defaultPositionId"), "UNK"),
         "proTeamId": p.get("proTeamId"),
-        "proTeam": NFL_TEAM_ABBR.get(p.get("proTeamId"), None),
+        "proTeam": NFL_TEAM_ABBR.get(p.get("proTeamId")),
         "injuryStatus": p.get("injuryStatus"),
         "eligibleSlots": [LINEUP_SLOT_MAP.get(sid, str(sid)) for sid in (p.get("eligibleSlots") or [])],
         "ownership": player_obj.get("ownership", {}),
     }
-    # stats array has elements with statSourceId (0=actual,1=projected) and scoringPeriodId
-    sp = {"projected": None, "actual": None, "season_proj_total": None}
+    proj = actual = season_proj_total = None
     for st in (player_obj.get("stats") or []):
         src = st.get("statSourceId")    # 0 actual, 1 projected
         spid = st.get("scoringPeriodId")
-        if current_spid and spid == current_spid:
-            if src == 1 and sp["projected"] is None:
-                sp["projected"] = st.get("appliedStatTotal")
-            if src == 0 and sp["actual"] is None:
-                sp["actual"] = st.get("appliedStatTotal")
-        # season-level projection totals sometimes come as scoringPeriodId = 0 or None with statSplitTypeId=1
-        if src == 1 and (spid in (0, None)) and sp["season_proj_total"] is None:
-            sp["season_proj_total"] = st.get("appliedStatTotal")
-    info["this_week"] = {
-        "projected": sp["projected"],
-        "actual": sp["actual"]
-    }
-    info["season_proj_total"] = sp["season_proj_total"]
-    # approximate ROS = season_proj_total - sum(actuals up to now); needs full season arrays to be perfect.
+        if spid == current_spid:
+            if src == 1 and proj is None:
+                proj = st.get("appliedStatTotal")
+            if src == 0 and actual is None:
+                actual = st.get("appliedStatTotal")
+        if src == 1 and (spid in (0, None)) and season_proj_total is None:
+            season_proj_total = st.get("appliedStatTotal")
+    info["this_week"] = {"projected": proj, "actual": actual}
+    info["season_proj_total"] = season_proj_total
     info["ros_proj_approx"] = None
     return info
 
-projections_this_week = [simplify_kona(p) for p in players_this_week]
+# Build current scoring period players
+current_spid = season_calendar.get("currentScoringPeriodId")
+projections_this_week = []
+if current_spid:
+    raw_players = fetch_players_kona_all(current_spid, max_pages=3)
+    projections_this_week = [simplify_kona(p, current_spid) for p in raw_players]
 
 # ================================
 # Free agents / waivers (market depth & replacement level)
 # ================================
-def pull_free_agents_by_pos(pos, size):
-    try:
-        fa = league.free_agents(pos, size=size)  # espn_api convenience
-    except Exception:
-        return []
-    out = []
-    for pl in fa:
-        item = {
-            "name": getattr(pl, "name", None),
-            "playerId": getattr(pl, "playerId", None) if hasattr(pl, "playerId") else getattr(pl, "id", None),
-            "defaultPosition": getattr(pl, "position", None),
-            "nfl_team": getattr(pl, "proTeam", None),
-            "percent_owned": getattr(pl, "percent_owned", None),
-            "projected_points": getattr(pl, "projected_points", None),
-            "injury_status": getattr(pl, "injuryStatus", None) if hasattr(pl, "injuryStatus") else None
+def pull_free_agents_by_pos_filter(pos_label, scoring_period_id, size=150):
+    rev = {v:k for k,v in POS_ID_MAP.items()}
+    pos_id = rev.get(pos_label)
+    filt = {
+        "players": {
+            "filterStatus": {"value": ["FA", "WA"]},
+            **({"filterDefaultPositionIds": {"value": [pos_id]}} if pos_id else {}),
+            "sortAppliedStatTotal": {"sortPriority": 1, "sortAsc": False, "value": scoring_period_id or 0},
+            "filterRanksForScoringPeriodIds": {"value": [scoring_period_id or 0]},
+            "filterRanksForRankTypes": {"value": ["STANDARD"]},
+            "filterRanksForSlotIds": {"value": [-1]},
         }
-        out.append(item)
+    }
+    out, pulled, start = [], 0, 0
+    while pulled < size:
+        batch = players_post(filt, scoring_period_id=scoring_period_id, start=start, limit=min(250, size - pulled))
+        if not batch: break
+        for p in batch:
+            pl = (p.get("player") or {})
+            item = {
+                "playerId": pl.get("id"),
+                "name": pl.get("fullName"),
+                "defaultPosition": POS_ID_MAP.get(pl.get("defaultPositionId")),
+                "nfl_team": NFL_TEAM_ABBR.get(pl.get("proTeamId")),
+                "percent_owned": (p.get("ownership") or {}).get("percentOwned"),
+                "injury_status": pl.get("injuryStatus")
+            }
+            proj = None
+            for st in (p.get("stats") or []):
+                if st.get("statSourceId") == 1 and st.get("scoringPeriodId") == scoring_period_id:
+                    proj = st.get("appliedStatTotal"); break
+            item["projected_points"] = proj
+            out.append(item)
+        pulled += len(batch)
+        start += len(batch)
+        if len(batch) < 250: break
     return out
 
 FREE_AGENT_POS = ["QB","RB","WR","TE","K","D/ST"]
-free_agents = {}
-for pos in FREE_AGENT_POS:
-    free_agents[pos] = pull_free_agents_by_pos(pos, FA_MAX_PER_POS)
+free_agents = {pos: pull_free_agents_by_pos_filter(pos, current_spid, size=FA_MAX_PER_POS) for pos in FREE_AGENT_POS}
 
-# ================================
-# Transactions / WA/FAAB (best-effort)
-# ================================
-transactions = []
-try:
-    # espn_api has recent_activity; combine with raw mTransactions2 if available
-    acts = league.recent_activity(50)
-    for a in acts:
-        transactions.append({
-            "actions": getattr(a, "actions", None),
-            "date": getattr(a, "date", None),
-            "type": getattr(a, "action_type", None),
-            "team": getattr(a, "team", None)
-        })
-except Exception:
-    pass
-
-# supplement with raw if present
-try:
-    for t in (raw_trans.get("transactions") or []):
-        transactions.append({
-            "id": t.get("id"),
-            "type": t.get("type"),
-            "executionType": t.get("executionType"),
-            "status": t.get("status"),
-            "proposedDate": t.get("proposedDate"),
-            "teamId": t.get("teamId"),
-            "bidAmount": t.get("bidAmount"),
-            "items": t.get("items")
-        })
-except Exception:
-    pass
-
-# ================================
-# Teams payload (record, PF/PA, trends, SoS)
-# ================================
-# Derive PF/PA from standings_map when available; fallback to espn_api
-pf_tot = {}
-pa_tot = {}
-record_map = {}
-for t in teams:
-    tid = t.team_id
-    std = standings_map.get(tid, {})
-    pf_tot[t.team_name] = float(std.get("pointsFor", getattr(t, "points_for", 0.0) or 0.0))
-    pa_tot[t.team_name] = float(std.get("pointsAgainst", getattr(t, "points_against", 0.0) or 0.0))
-    record_map[t.team_name] = {
-        "wins": int(std.get("wins", getattr(t, "wins", 0) or 0)),
-        "losses": int(std.get("losses", getattr(t, "losses", 0) or 0)),
-        "ties": int(std.get("ties", getattr(t, "ties", 0) or 0))
-    }
-
-# past SoS = average opponent PF to date
-opponents_by_team = {t.team_name: [] for t in teams}
-for wk in range(1, week + 1):
-    for g in scoreboards[wk]:
-        hn, an = g.home_team.team_name, g.away_team.team_name
-        opponents_by_team[hn].append(an)
-        opponents_by_team[an].append(hn)
-sos_avg = {}
-for name, opps in opponents_by_team.items():
-    sos_avg[name] = (sum(pf_tot.get(o, 0.0) for o in opps) / len(opps)) if opps else 0.0
-
-# H2H vs current PF top/bottom 5
-pf_sorted = sorted(pf_tot.items(), key=lambda x: x[1], reverse=True)
-top5 = set([n for n, _ in pf_sorted[:5]])
-bottom5 = set([n for n, _ in pf_sorted[-5:]]) if len(pf_sorted) >= 5 else set()
-
-def h2h_groups(team_name):
-    vtop = vbot = 0
-    for wk in range(1, week + 1):
-        for g in scoreboards[wk]:
-            if team_name not in (g.home_team.team_name, g.away_team.team_name):
-                continue
-            opp = g.away_team.team_name if team_name == g.home_team.team_name else g.home_team.team_name
-            won = ((g.home_score > g.away_score and team_name == g.home_team.team_name) or
-                   (g.away_score > g.home_score and team_name == g.away_team.team_name))
-            if won and opp in top5: vtop += 1
-            if won and opp in bottom5: vbot += 1
-    return {"vs_top5_wins": vtop, "vs_bottom5_wins": vbot}
-
-teams_payload = []
-for t in teams:
-    name = t.team_name
-    wp = weekly_points[name]
-    teams_payload.append({
-        "team_id": t.team_id,
-        "name": name,
-        "owners": owners_map.get(t.team_id, []),
-        "record": record_map[name],
-        "points_for_total": round(pf_tot[name], 2),
-        "points_against_total": round(pa_tot[name], 2),
-        "weekly_points": [round(x, 2) for x in wp],
-        "recent_avg_last3": round(mean_last_n(wp, 3), 2),
-        "stddev_points": round(safe_std(wp), 2),
-        "sos_past_avg_opponent_pf": round(sos_avg[name], 2),
-        "close_games": one_score[name],
-        "head_to_head": h2h_groups(name),
-        "allplay_expected_wins": round(allplay_expected_wins.get(name, 0.0), 3)
-    })
 
 # ================================
 # This week's games (winner-safe)
