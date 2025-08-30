@@ -35,7 +35,7 @@ def last_completed_week():
             continue
         if games and any(getattr(g, "winner", None) is not None for g in games):
             last_done = wk
-    return last_done or 1
+    return last_done
 
 def mean_last_n(values, n):
     if not values:
@@ -77,10 +77,94 @@ def lineup_block(box, home=True):
 
 # ---------- Determine week & pull boards ----------
 week = last_completed_week()
-scoreboard_this_week = league.scoreboard(week=week)
+if week == 0:
+    scoreboard_this_week = []
+else:
+    scoreboard_this_week = league.scoreboard(week=week)
 
 # ---------- League settings (Option A via espn_api) ----------
 s = getattr(league, "settings", None)
+
+def fetch_raw(view):
+    try:
+        return league._fetch_league(params={"view": view})
+    except Exception:
+        return {}
+
+raw_settings = fetch_raw("mSettings")       # full rules & calendar
+raw_prosched = fetch_raw("proSchedule")     # bye weeks (best-effort)
+
+LINEUP_SLOT_MAP = {
+    0:"QB",2:"RB",4:"WR",6:"TE",16:"D/ST",17:"K",20:"Bench",21:"IR",23:"FLEX",
+    24:"WR/RB",25:"WR/TE",26:"RB/TE",27:"OP",28:"DE",29:"DT",30:"LB",31:"DL",
+    32:"CB",33:"S",34:"DB",35:"DP"
+}
+
+settings_raw = raw_settings.get("settings", {}) or {}
+status_raw   = raw_settings.get("status",   {}) or {}
+scoring_raw  = settings_raw.get("scoringSettings", {}) or {}
+roster_raw   = settings_raw.get("rosterSettings",  {}) or {}
+schedule_raw = settings_raw.get("scheduleSettings",{}) or {}
+
+scoring_rules = [{
+    "statId": it.get("statId"),
+    "points": it.get("points"),
+    "isReverse": it.get("isReverse"),
+    "isDecimal": scoring_raw.get("decimalScoring"),
+    "name_hint": it.get("name")
+} for it in (scoring_raw.get("scoringItems") or [])]
+
+lineup_counts_raw = roster_raw.get("lineupSlotCounts", {}) or {}
+lineup_slots = {
+    str(slot): {"count": cnt, "slot_name": LINEUP_SLOT_MAP.get(int(slot), f"SLOT_{slot}")}
+    for slot, cnt in lineup_counts_raw.items()
+}
+
+season_calendar = {
+    "currentScoringPeriodId": status_raw.get("currentScoringPeriodId"),
+    "firstScoringPeriodId":   status_raw.get("firstScoringPeriodId"),
+    "finalScoringPeriodId":   status_raw.get("finalScoringPeriodId"),
+}
+
+bye_weeks = {}
+try:
+    teams = (raw_prosched.get("proSchedule", {}) or {}).get("teams", []) or []
+    for t in teams:
+        abbr = t.get("abbrev") or t.get("id")
+        if abbr:
+            bye_weeks[str(abbr)] = t.get("byeWeeks") or []
+except Exception:
+    bye_weeks = {}
+
+playoffs = {
+    "playoffTeamCount":            schedule_raw.get("playoffTeamCount"),
+    "playoffSeedingRule":          schedule_raw.get("playoffSeedingRule"),
+    "playoffMatchupPeriodLength":  schedule_raw.get("playoffMatchupPeriodLength"),
+    "matchupPeriodCount":          schedule_raw.get("matchupPeriodCount"),
+    "regularSeasonMatchupCount":   settings.get("regular_season_matchup_count"),  # from espn_api snapshot
+    "playoffByeCount":             schedule_raw.get("playoffByeCount"),
+}
+
+# Human-readable trade deadline (if present)
+trade_deadline_iso = None
+td_ms = settings.get("trade_deadline")
+if isinstance(td_ms, int):
+    try:
+        trade_deadline_iso = dt.datetime.utcfromtimestamp(td_ms/1000).isoformat() + "Z"
+    except Exception:
+        pass
+
+config = {
+    "scoring": {
+        "type": getattr(s, "scoring_type", None),
+        "rules": scoring_rules
+    },
+    "roster": {"lineup_slots": lineup_slots},
+    "season_calendar": {**season_calendar, "bye_weeks": bye_weeks},
+    "playoffs": playoffs,
+    "ui": {"trade_deadline_iso": trade_deadline_iso}
+}
+
 
 # ------- RAW settings pull (for full detail not exposed by espn_api) -------
 def fetch_raw(view):
@@ -225,13 +309,14 @@ for name, opps in opponents_by_team.items():
 # One-score game record (<= 10 pts margin)
 one_score = {name: {"wins": 0, "losses": 0} for name in team_names}
 for wk in range(1, week + 1):
-    for g in league.scoreboard(week=wk):
-        margin = abs(g.home_score - g.away_score)
-        if margin <= 10:
-            winner = g.home_team.team_name if g.home_score > g.away_score else g.away_team.team_name
-            loser  = g.away_team.team_name if winner == g.home_team.team_name else g.home_team.team_name
-            one_score[winner]["wins"]  += 1
-            one_score[loser]["losses"] += 1
+    if getattr(g, "winner", None) is not None:
+    margin = abs(g.home_score - g.away_score)
+    if margin <= 10:
+        winner = g.home_team.team_name if g.home_score > g.away_score else g.away_team.team_name
+        loser  = g.away_team.team_name if winner == g.home_team.team_name else g.home_team.team_name
+        one_score[winner]["wins"]  += 1
+        one_score[loser]["losses"] += 1
+
 
 # PF ranks for head-to-head vs top/bottom
 pf_sorted = sorted(pf_tot.items(), key=lambda x: x[1], reverse=True)
@@ -283,31 +368,39 @@ for t in teams:
 # ---------- This week’s games ----------
 games_payload = []
 for g in scoreboard_this_week:
-    margin = abs(g.home_score - g.away_score)
+    decided = getattr(g, "winner", None) is not None
+    home = g.home_team.team_name
+    away = g.away_team.team_name
+    hs, as_ = float(g.home_score), float(g.away_score)
+
+    margin = abs(hs - as_) if decided else None
+    winner = None
+    if decided:
+        winner = home if hs > as_ else away
+
     games_payload.append({
         "week": week,
-        "home": g.home_team.team_name,
-        "home_score": round(float(g.home_score), 2),
-        "away": g.away_team.team_name,
-        "away_score": round(float(g.away_score), 2),
-        "winner": g.home_team.team_name if g.home_score > g.away_score else g.away_team.team_name,
-        "margin": round(float(margin), 2)
+        "home": home,
+        "home_score": round(hs, 2),
+        "away": away,
+        "away_score": round(as_, 2),
+        "winner": winner,
+        "margin": round(margin, 2) if margin is not None else None,
+        "decided": decided
     })
+
 
 # ---------- Derived summary ----------
 derived = {}
-if games_payload:
-    closest = min(games_payload, key=lambda x: x["margin"])
-    # highest single team score in the week
-    single_scores = []
-    for m in games_payload:
-        single_scores.append((m["home"], m["home_score"]))
-        single_scores.append((m["away"], m["away_score"]))
+if week > 0 and games_payload and any(m["decided"] for m in games_payload):
+    decided_games = [m for m in games_payload if m["decided"]]
+    closest = min(decided_games, key=lambda x: x["margin"])
+    single_scores = [(m["home"], m["home_score"]) for m in decided_games] + \
+                    [(m["away"], m["away_score"]) for m in decided_games]
     top_team = max(single_scores, key=lambda x: x[1])
-    league_pf_avg = 0.0
+
     total_scores_sum = sum(sum(v) for v in weekly_points.values())
-    if week > 0 and len(team_names) > 0:
-        league_pf_avg = total_scores_sum / (len(team_names) * week)
+    league_pf_avg = (total_scores_sum / (len(team_names) * week)) if (week > 0 and team_names) else 0.0
 
     derived = {
         "closest_game": closest,
@@ -323,6 +416,7 @@ bundle = {
         "week_completed": week,
         "source": "espn_api"
     },
+    "config": config,
     "settings": settings,
     "teams": teams_payload,
     "games_this_week": games_payload,
