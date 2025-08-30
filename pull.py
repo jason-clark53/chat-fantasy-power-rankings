@@ -141,7 +141,7 @@ playoffs = {
     "playoffSeedingRule":          schedule_raw.get("playoffSeedingRule"),
     "playoffMatchupPeriodLength":  schedule_raw.get("playoffMatchupPeriodLength"),
     "matchupPeriodCount":          schedule_raw.get("matchupPeriodCount"),
-    "regularSeasonMatchupCount":   settings.get("regular_season_matchup_count"),  # from espn_api snapshot
+    "regularSeasonMatchupCount":   getattr(s, "regular_season_matchup_count", None),
     "playoffByeCount":             schedule_raw.get("playoffByeCount"),
 }
 
