@@ -1,9 +1,35 @@
 {
   "meta": {
-    "generated_at_utc": "2025-08-30T20:40:46Z",
+    "generated_at_utc": "2025-08-30T21:26:40Z",
     "season_year": 2025,
-    "week_completed": 1,
+    "week_completed": 0,
     "source": "espn_api"
+  },
+  "config": {
+    "scoring": {
+      "type": "H2H_POINTS",
+      "rules": []
+    },
+    "roster": {
+      "lineup_slots": {}
+    },
+    "season_calendar": {
+      "currentScoringPeriodId": null,
+      "firstScoringPeriodId": null,
+      "finalScoringPeriodId": null,
+      "bye_weeks": {}
+    },
+    "playoffs": {
+      "playoffTeamCount": null,
+      "playoffSeedingRule": null,
+      "playoffMatchupPeriodLength": null,
+      "matchupPeriodCount": null,
+      "regularSeasonMatchupCount": null,
+      "playoffByeCount": null
+    },
+    "ui": {
+      "trade_deadline_iso": "2025-11-24T17:00:00Z"
+    }
   },
   "settings": {
     "league_name": "Legen-Dairy League",
@@ -31,15 +57,13 @@
       },
       "points_for_total": 0.0,
       "points_against_total": 0.0,
-      "weekly_points": [
-        0.0
-      ],
+      "weekly_points": [],
       "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
       "sos_avg_opponent_pf": 0.0,
       "close_games": {
         "one_score_wins": 0,
-        "one_score_losses": 1
+        "one_score_losses": 0
       },
       "head_to_head": {
         "vs_top5_wins": 0,
@@ -57,14 +81,12 @@
       },
       "points_for_total": 0.0,
       "points_against_total": 0.0,
-      "weekly_points": [
-        0.0
-      ],
+      "weekly_points": [],
       "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
       "sos_avg_opponent_pf": 0.0,
       "close_games": {
-        "one_score_wins": 1,
+        "one_score_wins": 0,
         "one_score_losses": 0
       },
       "head_to_head": {
@@ -83,14 +105,12 @@
       },
       "points_for_total": 0.0,
       "points_against_total": 0.0,
-      "weekly_points": [
-        0.0
-      ],
+      "weekly_points": [],
       "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
       "sos_avg_opponent_pf": 0.0,
       "close_games": {
-        "one_score_wins": 1,
+        "one_score_wins": 0,
         "one_score_losses": 0
       },
       "head_to_head": {
@@ -109,14 +129,12 @@
       },
       "points_for_total": 0.0,
       "points_against_total": 0.0,
-      "weekly_points": [
-        0.0
-      ],
+      "weekly_points": [],
       "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
       "sos_avg_opponent_pf": 0.0,
       "close_games": {
-        "one_score_wins": 1,
+        "one_score_wins": 0,
         "one_score_losses": 0
       },
       "head_to_head": {
@@ -135,14 +153,12 @@
       },
       "points_for_total": 0.0,
       "points_against_total": 0.0,
-      "weekly_points": [
-        0.0
-      ],
+      "weekly_points": [],
       "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
       "sos_avg_opponent_pf": 0.0,
       "close_games": {
-        "one_score_wins": 1,
+        "one_score_wins": 0,
         "one_score_losses": 0
       },
       "head_to_head": {
@@ -161,15 +177,13 @@
       },
       "points_for_total": 0.0,
       "points_against_total": 0.0,
-      "weekly_points": [
-        0.0
-      ],
+      "weekly_points": [],
       "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
       "sos_avg_opponent_pf": 0.0,
       "close_games": {
         "one_score_wins": 0,
-        "one_score_losses": 1
+        "one_score_losses": 0
       },
       "head_to_head": {
         "vs_top5_wins": 0,
@@ -187,14 +201,12 @@
       },
       "points_for_total": 0.0,
       "points_against_total": 0.0,
-      "weekly_points": [
-        0.0
-      ],
+      "weekly_points": [],
       "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
       "sos_avg_opponent_pf": 0.0,
       "close_games": {
-        "one_score_wins": 1,
+        "one_score_wins": 0,
         "one_score_losses": 0
       },
       "head_to_head": {
@@ -213,15 +225,13 @@
       },
       "points_for_total": 0.0,
       "points_against_total": 0.0,
-      "weekly_points": [
-        0.0
-      ],
+      "weekly_points": [],
       "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
       "sos_avg_opponent_pf": 0.0,
       "close_games": {
         "one_score_wins": 0,
-        "one_score_losses": 1
+        "one_score_losses": 0
       },
       "head_to_head": {
         "vs_top5_wins": 0,
@@ -239,14 +249,12 @@
       },
       "points_for_total": 0.0,
       "points_against_total": 0.0,
-      "weekly_points": [
-        0.0
-      ],
+      "weekly_points": [],
       "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
       "sos_avg_opponent_pf": 0.0,
       "close_games": {
-        "one_score_wins": 1,
+        "one_score_wins": 0,
         "one_score_losses": 0
       },
       "head_to_head": {
@@ -265,15 +273,13 @@
       },
       "points_for_total": 0.0,
       "points_against_total": 0.0,
-      "weekly_points": [
-        0.0
-      ],
+      "weekly_points": [],
       "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
       "sos_avg_opponent_pf": 0.0,
       "close_games": {
         "one_score_wins": 0,
-        "one_score_losses": 1
+        "one_score_losses": 0
       },
       "head_to_head": {
         "vs_top5_wins": 0,
@@ -291,15 +297,13 @@
       },
       "points_for_total": 0.0,
       "points_against_total": 0.0,
-      "weekly_points": [
-        0.0
-      ],
+      "weekly_points": [],
       "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
       "sos_avg_opponent_pf": 0.0,
       "close_games": {
         "one_score_wins": 0,
-        "one_score_losses": 1
+        "one_score_losses": 0
       },
       "head_to_head": {
         "vs_top5_wins": 0,
@@ -317,15 +321,13 @@
       },
       "points_for_total": 0.0,
       "points_against_total": 0.0,
-      "weekly_points": [
-        0.0
-      ],
+      "weekly_points": [],
       "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
       "sos_avg_opponent_pf": 0.0,
       "close_games": {
         "one_score_wins": 0,
-        "one_score_losses": 1
+        "one_score_losses": 0
       },
       "head_to_head": {
         "vs_top5_wins": 0,
@@ -343,14 +345,12 @@
       },
       "points_for_total": 0.0,
       "points_against_total": 0.0,
-      "weekly_points": [
-        0.0
-      ],
+      "weekly_points": [],
       "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
       "sos_avg_opponent_pf": 0.0,
       "close_games": {
-        "one_score_wins": 1,
+        "one_score_wins": 0,
         "one_score_losses": 0
       },
       "head_to_head": {
@@ -369,15 +369,13 @@
       },
       "points_for_total": 0.0,
       "points_against_total": 0.0,
-      "weekly_points": [
-        0.0
-      ],
+      "weekly_points": [],
       "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
       "sos_avg_opponent_pf": 0.0,
       "close_games": {
         "one_score_wins": 0,
-        "one_score_losses": 1
+        "one_score_losses": 0
       },
       "head_to_head": {
         "vs_top5_wins": 0,
@@ -386,85 +384,6 @@
       "notes": ""
     }
   ],
-  "games_this_week": [
-    {
-      "week": 1,
-      "home": "The Union Strikes Back",
-      "home_score": 0.0,
-      "away": "Koo Koo's Nest",
-      "away_score": 0.0,
-      "winner": "Koo Koo's Nest",
-      "margin": 0.0
-    },
-    {
-      "week": 1,
-      "home": "HallOfBass",
-      "home_score": 0.0,
-      "away": "Home Team",
-      "away_score": 0.0,
-      "winner": "Home Team",
-      "margin": 0.0
-    },
-    {
-      "week": 1,
-      "home": "Ragnar the Spoiled",
-      "home_score": 0.0,
-      "away": "Anzalone Hair Jealousy",
-      "away_score": 0.0,
-      "winner": "Anzalone Hair Jealousy",
-      "margin": 0.0
-    },
-    {
-      "week": 1,
-      "home": "Thirst Down and 10",
-      "home_score": 0.0,
-      "away": "Go Go Gators",
-      "away_score": 0.0,
-      "winner": "Go Go Gators",
-      "margin": 0.0
-    },
-    {
-      "week": 1,
-      "home": "Team Hairy",
-      "home_score": 0.0,
-      "away": "Team Kolb",
-      "away_score": 0.0,
-      "winner": "Team Kolb",
-      "margin": 0.0
-    },
-    {
-      "week": 1,
-      "home": "The Separatists Rise Again",
-      "home_score": 0.0,
-      "away": "For McCaffrey",
-      "away_score": 0.0,
-      "winner": "For McCaffrey",
-      "margin": 0.0
-    },
-    {
-      "week": 1,
-      "home": "Toddler Energy ",
-      "home_score": 0.0,
-      "away": "J-man\u2019s team",
-      "away_score": 0.0,
-      "winner": "J-man\u2019s team",
-      "margin": 0.0
-    }
-  ],
-  "derived": {
-    "closest_game": {
-      "week": 1,
-      "home": "The Union Strikes Back",
-      "home_score": 0.0,
-      "away": "Koo Koo's Nest",
-      "away_score": 0.0,
-      "winner": "Koo Koo's Nest",
-      "margin": 0.0
-    },
-    "highest_single_team_score": {
-      "team": "The Union Strikes Back",
-      "points": 0.0
-    },
-    "league_pf_avg_to_date": 0.0
-  }
+  "games_this_week": [],
+  "derived": {}
 }
