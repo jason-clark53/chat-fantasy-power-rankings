@@ -310,7 +310,7 @@ for name, opps in opponents_by_team.items():
 one_score = {name: {"wins": 0, "losses": 0} for name in team_names}
 for wk in range(1, week + 1):
     if getattr(g, "winner", None) is not None:
-    margin = abs(g.home_score - g.away_score)
+        margin = abs(g.home_score - g.away_score)
     if margin <= 10:
         winner = g.home_team.team_name if g.home_score > g.away_score else g.away_team.team_name
         loser  = g.away_team.team_name if winner == g.home_team.team_name else g.home_team.team_name
