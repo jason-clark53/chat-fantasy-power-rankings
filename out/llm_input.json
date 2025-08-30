@@ -1,9 +1,9 @@
 {
   "meta": {
-    "generated_at_utc": "2025-08-30T21:27:03Z",
+    "generated_at_utc": "2025-08-30T21:38:21Z",
     "season_year": 2025,
     "week_completed": 0,
-    "source": "espn_api"
+    "source": "espn_api+raw_v3"
   },
   "config": {
     "scoring": {
@@ -20,9 +20,9 @@
       "bye_weeks": {}
     },
     "playoffs": {
-      "playoffTeamCount": null,
+      "playoffTeamCount": 6,
       "playoffSeedingRule": null,
-      "playoffMatchupPeriodLength": null,
+      "playoffMatchupPeriodLength": 1,
       "matchupPeriodCount": null,
       "regularSeasonMatchupCount": null,
       "playoffByeCount": null
@@ -48,8 +48,9 @@
   },
   "teams": [
     {
+      "team_id": 1,
       "name": "The Union Strikes Back",
-      "owner": null,
+      "owners": [],
       "record": {
         "wins": 0,
         "losses": 0,
@@ -60,20 +61,21 @@
       "weekly_points": [],
       "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
-      "sos_avg_opponent_pf": 0.0,
+      "sos_past_avg_opponent_pf": 0.0,
       "close_games": {
-        "one_score_wins": 0,
-        "one_score_losses": 0
+        "wins": 0,
+        "losses": 0
       },
       "head_to_head": {
         "vs_top5_wins": 0,
         "vs_bottom5_wins": 0
       },
-      "notes": ""
+      "allplay_expected_wins": 0.0
     },
     {
+      "team_id": 2,
       "name": "Koo Koo's Nest",
-      "owner": null,
+      "owners": [],
       "record": {
         "wins": 0,
         "losses": 0,
@@ -84,20 +86,21 @@
       "weekly_points": [],
       "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
-      "sos_avg_opponent_pf": 0.0,
+      "sos_past_avg_opponent_pf": 0.0,
       "close_games": {
-        "one_score_wins": 0,
-        "one_score_losses": 0
+        "wins": 0,
+        "losses": 0
       },
       "head_to_head": {
         "vs_top5_wins": 0,
         "vs_bottom5_wins": 0
       },
-      "notes": ""
+      "allplay_expected_wins": 0.0
     },
     {
+      "team_id": 3,
       "name": "J-man\u2019s team",
-      "owner": null,
+      "owners": [],
       "record": {
         "wins": 0,
         "losses": 0,
@@ -108,20 +111,21 @@
       "weekly_points": [],
       "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
-      "sos_avg_opponent_pf": 0.0,
+      "sos_past_avg_opponent_pf": 0.0,
       "close_games": {
-        "one_score_wins": 0,
-        "one_score_losses": 0
+        "wins": 0,
+        "losses": 0
       },
       "head_to_head": {
         "vs_top5_wins": 0,
         "vs_bottom5_wins": 0
       },
-      "notes": ""
+      "allplay_expected_wins": 0.0
     },
     {
+      "team_id": 4,
       "name": "Home Team",
-      "owner": null,
+      "owners": [],
       "record": {
         "wins": 0,
         "losses": 0,
@@ -132,20 +136,21 @@
       "weekly_points": [],
       "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
-      "sos_avg_opponent_pf": 0.0,
+      "sos_past_avg_opponent_pf": 0.0,
       "close_games": {
-        "one_score_wins": 0,
-        "one_score_losses": 0
+        "wins": 0,
+        "losses": 0
       },
       "head_to_head": {
         "vs_top5_wins": 0,
         "vs_bottom5_wins": 0
       },
-      "notes": ""
+      "allplay_expected_wins": 0.0
     },
     {
+      "team_id": 5,
       "name": "For McCaffrey",
-      "owner": null,
+      "owners": [],
       "record": {
         "wins": 0,
         "losses": 0,
@@ -156,20 +161,21 @@
       "weekly_points": [],
       "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
-      "sos_avg_opponent_pf": 0.0,
+      "sos_past_avg_opponent_pf": 0.0,
       "close_games": {
-        "one_score_wins": 0,
-        "one_score_losses": 0
+        "wins": 0,
+        "losses": 0
       },
       "head_to_head": {
         "vs_top5_wins": 0,
         "vs_bottom5_wins": 0
       },
-      "notes": ""
+      "allplay_expected_wins": 0.0
     },
     {
+      "team_id": 6,
       "name": "Team Hairy",
-      "owner": null,
+      "owners": [],
       "record": {
         "wins": 0,
         "losses": 0,
@@ -180,20 +186,21 @@
       "weekly_points": [],
       "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
-      "sos_avg_opponent_pf": 0.0,
+      "sos_past_avg_opponent_pf": 0.0,
       "close_games": {
-        "one_score_wins": 0,
-        "one_score_losses": 0
+        "wins": 0,
+        "losses": 0
       },
       "head_to_head": {
         "vs_top5_wins": 0,
         "vs_bottom5_wins": 0
       },
-      "notes": ""
+      "allplay_expected_wins": 0.0
     },
     {
+      "team_id": 7,
       "name": "Go Go Gators",
-      "owner": null,
+      "owners": [],
       "record": {
         "wins": 0,
         "losses": 0,
@@ -204,20 +211,21 @@
       "weekly_points": [],
       "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
-      "sos_avg_opponent_pf": 0.0,
+      "sos_past_avg_opponent_pf": 0.0,
       "close_games": {
-        "one_score_wins": 0,
-        "one_score_losses": 0
+        "wins": 0,
+        "losses": 0
       },
       "head_to_head": {
         "vs_top5_wins": 0,
         "vs_bottom5_wins": 0
       },
-      "notes": ""
+      "allplay_expected_wins": 0.0
     },
     {
+      "team_id": 8,
       "name": "Ragnar the Spoiled",
-      "owner": null,
+      "owners": [],
       "record": {
         "wins": 0,
         "losses": 0,
@@ -228,20 +236,21 @@
       "weekly_points": [],
       "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
-      "sos_avg_opponent_pf": 0.0,
+      "sos_past_avg_opponent_pf": 0.0,
       "close_games": {
-        "one_score_wins": 0,
-        "one_score_losses": 0
+        "wins": 0,
+        "losses": 0
       },
       "head_to_head": {
         "vs_top5_wins": 0,
         "vs_bottom5_wins": 0
       },
-      "notes": ""
+      "allplay_expected_wins": 0.0
     },
     {
+      "team_id": 9,
       "name": "Anzalone Hair Jealousy",
-      "owner": null,
+      "owners": [],
       "record": {
         "wins": 0,
         "losses": 0,
@@ -252,20 +261,21 @@
       "weekly_points": [],
       "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
-      "sos_avg_opponent_pf": 0.0,
+      "sos_past_avg_opponent_pf": 0.0,
       "close_games": {
-        "one_score_wins": 0,
-        "one_score_losses": 0
+        "wins": 0,
+        "losses": 0
       },
       "head_to_head": {
         "vs_top5_wins": 0,
         "vs_bottom5_wins": 0
       },
-      "notes": ""
+      "allplay_expected_wins": 0.0
     },
     {
+      "team_id": 10,
       "name": "The Separatists Rise Again",
-      "owner": null,
+      "owners": [],
       "record": {
         "wins": 0,
         "losses": 0,
@@ -276,20 +286,21 @@
       "weekly_points": [],
       "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
-      "sos_avg_opponent_pf": 0.0,
+      "sos_past_avg_opponent_pf": 0.0,
       "close_games": {
-        "one_score_wins": 0,
-        "one_score_losses": 0
+        "wins": 0,
+        "losses": 0
       },
       "head_to_head": {
         "vs_top5_wins": 0,
         "vs_bottom5_wins": 0
       },
-      "notes": ""
+      "allplay_expected_wins": 0.0
     },
     {
+      "team_id": 11,
       "name": "Toddler Energy ",
-      "owner": null,
+      "owners": [],
       "record": {
         "wins": 0,
         "losses": 0,
@@ -300,20 +311,21 @@
       "weekly_points": [],
       "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
-      "sos_avg_opponent_pf": 0.0,
+      "sos_past_avg_opponent_pf": 0.0,
       "close_games": {
-        "one_score_wins": 0,
-        "one_score_losses": 0
+        "wins": 0,
+        "losses": 0
       },
       "head_to_head": {
         "vs_top5_wins": 0,
         "vs_bottom5_wins": 0
       },
-      "notes": ""
+      "allplay_expected_wins": 0.0
     },
     {
+      "team_id": 12,
       "name": "HallOfBass",
-      "owner": null,
+      "owners": [],
       "record": {
         "wins": 0,
         "losses": 0,
@@ -324,20 +336,21 @@
       "weekly_points": [],
       "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
-      "sos_avg_opponent_pf": 0.0,
+      "sos_past_avg_opponent_pf": 0.0,
       "close_games": {
-        "one_score_wins": 0,
-        "one_score_losses": 0
+        "wins": 0,
+        "losses": 0
       },
       "head_to_head": {
         "vs_top5_wins": 0,
         "vs_bottom5_wins": 0
       },
-      "notes": ""
+      "allplay_expected_wins": 0.0
     },
     {
+      "team_id": 13,
       "name": "Team Kolb",
-      "owner": null,
+      "owners": [],
       "record": {
         "wins": 0,
         "losses": 0,
@@ -348,20 +361,21 @@
       "weekly_points": [],
       "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
-      "sos_avg_opponent_pf": 0.0,
+      "sos_past_avg_opponent_pf": 0.0,
       "close_games": {
-        "one_score_wins": 0,
-        "one_score_losses": 0
+        "wins": 0,
+        "losses": 0
       },
       "head_to_head": {
         "vs_top5_wins": 0,
         "vs_bottom5_wins": 0
       },
-      "notes": ""
+      "allplay_expected_wins": 0.0
     },
     {
+      "team_id": 14,
       "name": "Thirst Down and 10",
-      "owner": null,
+      "owners": [],
       "record": {
         "wins": 0,
         "losses": 0,
@@ -372,18 +386,36 @@
       "weekly_points": [],
       "recent_avg_last3": 0.0,
       "stddev_points": 0.0,
-      "sos_avg_opponent_pf": 0.0,
+      "sos_past_avg_opponent_pf": 0.0,
       "close_games": {
-        "one_score_wins": 0,
-        "one_score_losses": 0
+        "wins": 0,
+        "losses": 0
       },
       "head_to_head": {
         "vs_top5_wins": 0,
         "vs_bottom5_wins": 0
       },
-      "notes": ""
+      "allplay_expected_wins": 0.0
     }
   ],
+  "standings_raw": {},
+  "schedule": [],
+  "rosters": [],
+  "player_projections": {
+    "this_week": []
+  },
+  "market": {
+    "free_agents": {
+      "QB": [],
+      "RB": [],
+      "WR": [],
+      "TE": [],
+      "K": [],
+      "D/ST": []
+    }
+  },
+  "transactions": [],
   "games_this_week": [],
-  "derived": {}
+  "derived": {},
+  "history": []
 }
