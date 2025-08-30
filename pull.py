@@ -82,27 +82,97 @@ scoreboard_this_week = league.scoreboard(week=week)
 # ---------- League settings (Option A via espn_api) ----------
 s = getattr(league, "settings", None)
 
-# ---------- League settings snapshot ----------
-settings = {
-    # Names
-    "league_name": getattr(s, "name", None) or getattr(league, "league_name", None),
-    # Structure
-    "team_count": getattr(s, "team_count", None),
-    "division_count": getattr(s, "division_count", None) if hasattr(s, "division_count") else None,
-    "has_divisions": bool(getattr(s, "divisions", None)) if hasattr(s, "divisions") else None,
-    # Scoring
-    "scoring_type": getattr(s, "scoring_type", None),               # e.g., "PPR", "STANDARD"
-    "decimal_scoring": getattr(s, "decimal_scoring", None),
-    # Schedule / Playoffs
-    "regular_season_matchup_count": getattr(s, "regular_season_matchup_count", None),
-    "matchup_period_count": getattr(s, "matchup_period_count", None),  # often same as reg-season weeks
-    "playoff_team_count": getattr(s, "playoff_team_count", None),
-    "playoff_matchup_period_length": getattr(s, "playoff_matchup_period_length", None),
-    "playoff_seed_rule": getattr(s, "playoff_seed_rule", None),
-    # Transactions (handy context)
-    "waiver_type": getattr(s, "waiver_type", None),
-    "trade_deadline": getattr(s, "trade_deadline", None),
+# ------- RAW settings pull (for full detail not exposed by espn_api) -------
+def fetch_raw(view):
+    try:
+        return league._fetch_league(params={"view": view})
+    except Exception:
+        return {}
+
+raw_settings = fetch_raw("mSettings")          # scoring/roster/schedule + status
+raw_prosched = fetch_raw("proSchedule")        # try to get NFL bye weeks (may be empty)
+
+# Optional: readable names for lineup slot ids (ESPN numeric codes)
+LINEUP_SLOT_MAP = {
+    0:"QB", 2:"RB", 4:"WR", 6:"TE", 16:"D/ST", 17:"K",
+    20:"Bench", 21:"IR", 23:"FLEX", 24:"WR/RB", 25:"WR/TE", 26:"RB/TE",
+    27:"OP", 28:"DE", 29:"DT", 30:"LB", 31:"DL", 32:"CB", 33:"S", 34:"DB", 35:"DP"
 }
+
+# ------- Extract configuration pieces -------
+settings_raw    = raw_settings.get("settings", {}) or {}
+status_raw      = raw_settings.get("status",   {}) or {}
+scoring_raw     = settings_raw.get("scoringSettings", {}) or {}
+roster_raw      = settings_raw.get("rosterSettings",  {}) or {}
+schedule_raw    = settings_raw.get("scheduleSettings",{}) or {}
+
+# Scoring rules: map statId -> points (keep raw ids so math matches ESPN exactly)
+scoring_rules = []
+for item in scoring_raw.get("scoringItems", []) or []:
+    # Common fields: statId, points, isReverse, multipliers, etc.
+    scoring_rules.append({
+        "statId": item.get("statId"),
+        "points": item.get("points"),
+        "isReverse": item.get("isReverse"),
+        "isDecimal": scoring_raw.get("decimalScoring"),
+        "name_hint": item.get("name"),  # some leagues include this; often None
+    })
+
+# Roster slots & lineup limits (slotId -> count) plus human names when available
+lineup_counts_raw = roster_raw.get("lineupSlotCounts", {}) or {}
+lineup_slots = {
+    str(slot_id): {
+        "count": cnt,
+        "slot_name": LINEUP_SLOT_MAP.get(int(slot_id), f"SLOT_{slot_id}")
+    }
+    for slot_id, cnt in lineup_counts_raw.items()
+}
+
+# Season calendar: scoring period ids (used for week indexing / ROS math)
+season_calendar = {
+    "currentScoringPeriodId": status_raw.get("currentScoringPeriodId"),
+    "firstScoringPeriodId":   status_raw.get("firstScoringPeriodId"),
+    "finalScoringPeriodId":   status_raw.get("finalScoringPeriodId"),
+}
+
+# NFL bye weeks (best-effort from proSchedule; may be empty on some seasons/views)
+bye_weeks = {}  # { "KC": [10], "DET": [5], ... }
+try:
+    teams = (raw_prosched.get("proSchedule", {}) or {}).get("teams", []) or []
+    for t in teams:
+        abbr = t.get("abbrev") or t.get("id")
+        byes = t.get("byeWeeks") or []
+        if abbr:
+            bye_weeks[str(abbr)] = byes
+except Exception:
+    bye_weeks = {}
+
+# Playoff format (weeks, team count, byes, matchup length, seeding rule)
+playoffs = {
+    "playoffTeamCount":              schedule_raw.get("playoffTeamCount"),
+    "playoffSeedingRule":            schedule_raw.get("playoffSeedingRule"),
+    "playoffMatchupPeriodLength":    schedule_raw.get("playoffMatchupPeriodLength"),
+    "matchupPeriodCount":            schedule_raw.get("matchupPeriodCount"),
+    "regularSeasonMatchupCount":     schedule_raw.get("matchupPeriodCount"),  # often same; keep both keys for clarity
+    "playoffByeCount":               schedule_raw.get("playoffByeCount"),     # may be absent; OK if None
+}
+
+# One consolidated configuration block (context for all math)
+config = {
+    "scoring": {
+        "type": getattr(s, "scoring_type", None),     # PPR/Standard/Half
+        "rules": scoring_rules                        # statId -> points, etc.
+    },
+    "roster": {
+        "lineup_slots": lineup_slots                  # slotId -> {count, slot_name}
+    },
+    "season_calendar": {
+        **season_calendar,
+        "bye_weeks": bye_weeks                        # NFL team -> [weeks]
+    },
+    "playoffs": playoffs
+}
+
 
 # ---------- Team-level aggregates ----------
 teams = league.teams
