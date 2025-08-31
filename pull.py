@@ -107,52 +107,48 @@ def GET(url, params=None, timeout=20, retries=3, backoff=0.6):
     return {}
 
 # ================================
-# Team managers (owner display names) — robust
+# Team managers (owner display names) — robust with espn_api fallback
 # ================================
 def _fetch_view_with_wrapper_then_http(view: str, year: int):
-    """
-    Try league._fetch_league(params={'view': view}) first (uses the espn_api session),
-    then fall back to raw GET.
-    """
-    # wrapper first
+    """Try league._fetch_league(params={'view': view}) first, then raw GET."""
     try:
         data = league._fetch_league(params={"view": view})
         if isinstance(data, dict) and data:
             return data
     except Exception:
         pass
-
-    # raw HTTP fallback
     base = f"https://fantasy.espn.com/apis/v3/games/ffl/seasons/{year}/segments/0/leagues/{LEAGUE_ID}"
     return GET(base, params={"view": view})
 
 def fetch_team_managers(league_id: int, year: int) -> dict[int, list[str]]:
     """
-    Returns {teamId: [manager display names...]} by joining:
-      - mTeam.teams[].owners[] or .primaryOwner -> owner IDs per team
-      - mMembers.members[] -> owner ID -> displayName (or name/email/ID fallback)
+    Returns {teamId: [manager display names...]} using multiple strategies:
+      A) mTeam + mMembers (wrapper-first, then HTTP)
+      B) espn_api.Team.owner / Team.owners fallback
     """
-    # 1) Pull owners per team (wrapper-first, then HTTP)
-    raw_team = _fetch_view_with_wrapper_then_http("mTeam", year)
-    owners_map: dict[int, list[str]] = {}
+    managers_by_team: dict[int, list[str]] = {}
 
+    # ---------- A) Try API views (preferred) ----------
+    raw_team = _fetch_view_with_wrapper_then_http("mTeam", year) or {}
+    raw_members = _fetch_view_with_wrapper_then_http("mMembers", year) or {}
+
+    # Build owner IDs per team (owners[] or primaryOwner)
+    owners_map: dict[int, list[str]] = {}
     for t in (raw_team.get("teams") or []):
         tid = t.get("id")
-        owners = t.get("owners", []) or []
-        # Some leagues only expose a single 'primaryOwner'
+        owners = list(t.get("owners", []) or [])
         primary = t.get("primaryOwner")
         if primary and primary not in owners:
             owners.append(primary)
         owners_map[tid] = owners
 
-    # 2) Pull member directory (owner ID -> display name)
-    raw_members = _fetch_view_with_wrapper_then_http("mMembers", year)
+    # Map member ID -> display name
     members_map: dict[str, str] = {}
     for m in (raw_members.get("members") or []):
         oid = m.get("id")
         display = (
             m.get("displayName")
-            or " ".join([x for x in [m.get("firstName"), m.get("lastName")] if x])
+            or " ".join(x for x in [m.get("firstName"), m.get("lastName")] if x)
             or m.get("nickname")
             or m.get("email")
             or oid
@@ -160,12 +156,43 @@ def fetch_team_managers(league_id: int, year: int) -> dict[int, list[str]]:
         if oid:
             members_map[oid] = display
 
-    # 3) Resolve owners -> display names per team (fallback to raw IDs if needed)
-    managers_by_team: dict[int, list[str]] = {}
-    for tid, owner_ids in owners_map.items():
-        managers_by_team[tid] = [members_map.get(oid, oid) for oid in owner_ids]
+    # Resolve names from owners_map + members_map
+    if owners_map:
+        for tid, owner_ids in owners_map.items():
+            if owner_ids:
+                managers_by_team[tid] = [members_map.get(oid, oid) for oid in owner_ids]
+
+    # ---------- B) espn_api fallback if still missing/empty ----------
+    # Many leagues expose a friendly string via t.owner or t.owners on the Team object.
+    # We’ll only add these if we have nothing from (A) or to fill blanks.
+    for team_obj in league.teams:
+        tid = team_obj.team_id
+        # espn_api exposes either a single string or a list (varies by version)
+        fallbacks: list[str] = []
+        # Try .owners (list-like)
+        if hasattr(team_obj, "owners"):
+            try:
+                if isinstance(team_obj.owners, (list, tuple)):
+                    fallbacks.extend([str(x) for x in team_obj.owners if x])
+                elif team_obj.owners:
+                    fallbacks.append(str(team_obj.owners))
+            except Exception:
+                pass
+        # Try .owner (single string)
+        if hasattr(team_obj, "owner"):
+            try:
+                if team_obj.owner:
+                    fallbacks.append(str(team_obj.owner))
+            except Exception:
+                pass
+
+        # If we already have names from (A), only fill empty
+        if tid not in managers_by_team or not managers_by_team[tid]:
+            if fallbacks:
+                managers_by_team[tid] = fallbacks
 
     return managers_by_team
+
 
 
 # ================================
