@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at_utc": "2025-08-31T00:40:53Z",
+    "generated_at_utc": "2025-08-31T13:38:01Z",
     "source": "espn_api + leagueHistory"
   },
   "league": {
@@ -165,5 +165,296 @@
       "points_against": 0.0
     }
   ],
-  "history": []
+  "history": [
+    {
+      "season": 2024,
+      "teams": [
+        {
+          "teamId": 1,
+          "name": "The Union Strikes Back",
+          "wins": 8,
+          "losses": 6,
+          "ties": 0,
+          "pointsFor": 1643.8199999999997,
+          "pointsAgainst": 1664.4,
+          "rankFinal": 1
+        },
+        {
+          "teamId": 2,
+          "name": "Koo Koo's Nest",
+          "wins": 6,
+          "losses": 8,
+          "ties": 0,
+          "pointsFor": 1528.3200000000002,
+          "pointsAgainst": 1561.26,
+          "rankFinal": 10
+        },
+        {
+          "teamId": 3,
+          "name": "J-man\u2019s team",
+          "wins": 6,
+          "losses": 8,
+          "ties": 0,
+          "pointsFor": 1353.74,
+          "pointsAgainst": 1504.44,
+          "rankFinal": 11
+        },
+        {
+          "teamId": 4,
+          "name": "Home Team",
+          "wins": 8,
+          "losses": 6,
+          "ties": 0,
+          "pointsFor": 1739.6,
+          "pointsAgainst": 1548.3,
+          "rankFinal": 5
+        },
+        {
+          "teamId": 5,
+          "name": "For McCaffrey",
+          "wins": 8,
+          "losses": 6,
+          "ties": 0,
+          "pointsFor": 1651.1,
+          "pointsAgainst": 1574.86,
+          "rankFinal": 2
+        },
+        {
+          "teamId": 6,
+          "name": "Team Hairy",
+          "wins": 11,
+          "losses": 3,
+          "ties": 0,
+          "pointsFor": 1612.0399999999997,
+          "pointsAgainst": 1413.76,
+          "rankFinal": 4
+        },
+        {
+          "teamId": 7,
+          "name": "Go Go Gators",
+          "wins": 8,
+          "losses": 6,
+          "ties": 0,
+          "pointsFor": 1654.3000000000002,
+          "pointsAgainst": 1512.98,
+          "rankFinal": 6
+        },
+        {
+          "teamId": 8,
+          "name": "Ragnar the Spoiled",
+          "wins": 8,
+          "losses": 6,
+          "ties": 0,
+          "pointsFor": 1641.6599999999999,
+          "pointsAgainst": 1485.04,
+          "rankFinal": 8
+        },
+        {
+          "teamId": 9,
+          "name": "Anzalone Hair Jealousy",
+          "wins": 6,
+          "losses": 8,
+          "ties": 0,
+          "pointsFor": 1293.28,
+          "pointsAgainst": 1443.16,
+          "rankFinal": 12
+        },
+        {
+          "teamId": 10,
+          "name": "The Separatists Rise Again ",
+          "wins": 7,
+          "losses": 7,
+          "ties": 0,
+          "pointsFor": 1594.04,
+          "pointsAgainst": 1565.44,
+          "rankFinal": 7
+        },
+        {
+          "teamId": 11,
+          "name": "Toddler Energy ",
+          "wins": 2,
+          "losses": 12,
+          "ties": 0,
+          "pointsFor": 1271.02,
+          "pointsAgainst": 1593.62,
+          "rankFinal": 14
+        },
+        {
+          "teamId": 12,
+          "name": "HallOfBass",
+          "wins": 10,
+          "losses": 4,
+          "ties": 0,
+          "pointsFor": 1628.6,
+          "pointsAgainst": 1469.2,
+          "rankFinal": 3
+        },
+        {
+          "teamId": 13,
+          "name": "Team Kolb",
+          "wins": 6,
+          "losses": 8,
+          "ties": 0,
+          "pointsFor": 1492.4200000000003,
+          "pointsAgainst": 1593.12,
+          "rankFinal": 9
+        },
+        {
+          "teamId": 14,
+          "name": "Thirst Down and 10",
+          "wins": 4,
+          "losses": 10,
+          "ties": 0,
+          "pointsFor": 1429.4599999999998,
+          "pointsAgainst": 1603.82,
+          "rankFinal": 13
+        }
+      ]
+    },
+    {
+      "season": 2023,
+      "teams": [
+        {
+          "teamId": 1,
+          "name": "Ayahuasca Trip",
+          "wins": 8,
+          "losses": 6,
+          "ties": 0,
+          "pointsFor": 1594.5,
+          "pointsAgainst": 1498.16,
+          "rankFinal": 5
+        },
+        {
+          "teamId": 2,
+          "name": "Howell At The Moon",
+          "wins": 9,
+          "losses": 5,
+          "ties": 0,
+          "pointsFor": 1643.6,
+          "pointsAgainst": 1513.8,
+          "rankFinal": 6
+        },
+        {
+          "teamId": 3,
+          "name": "Dr. Doolittle",
+          "wins": 8,
+          "losses": 6,
+          "ties": 0,
+          "pointsFor": 1518.3,
+          "pointsAgainst": 1548.22,
+          "rankFinal": 10
+        },
+        {
+          "teamId": 4,
+          "name": "Home Team",
+          "wins": 5,
+          "losses": 9,
+          "ties": 0,
+          "pointsFor": 1556.8000000000002,
+          "pointsAgainst": 1589.1,
+          "rankFinal": 8
+        },
+        {
+          "teamId": 5,
+          "name": "POWER WORM!!!",
+          "wins": 10,
+          "losses": 4,
+          "ties": 0,
+          "pointsFor": 1552.5999999999997,
+          "pointsAgainst": 1522.88,
+          "rankFinal": 1
+        },
+        {
+          "teamId": 6,
+          "name": "Team Hairy",
+          "wins": 2,
+          "losses": 12,
+          "ties": 0,
+          "pointsFor": 1213.8600000000001,
+          "pointsAgainst": 1478.5,
+          "rankFinal": 14
+        },
+        {
+          "teamId": 7,
+          "name": "Clarkoby Brewers",
+          "wins": 5,
+          "losses": 9,
+          "ties": 0,
+          "pointsFor": 1542.24,
+          "pointsAgainst": 1658.32,
+          "rankFinal": 11
+        },
+        {
+          "teamId": 8,
+          "name": "Ragnar the Spoiled",
+          "wins": 9,
+          "losses": 5,
+          "ties": 0,
+          "pointsFor": 1686.86,
+          "pointsAgainst": 1556.74,
+          "rankFinal": 3
+        },
+        {
+          "teamId": 9,
+          "name": "Beal City  Wild Cats ",
+          "wins": 10,
+          "losses": 4,
+          "ties": 0,
+          "pointsFor": 1552.0399999999997,
+          "pointsAgainst": 1436.6,
+          "rankFinal": 4
+        },
+        {
+          "teamId": 10,
+          "name": "The Geno Gibbs Show",
+          "wins": 6,
+          "losses": 8,
+          "ties": 0,
+          "pointsFor": 1594.64,
+          "pointsAgainst": 1588.34,
+          "rankFinal": 13
+        },
+        {
+          "teamId": 11,
+          "name": "Toddler Energy ",
+          "wins": 10,
+          "losses": 4,
+          "ties": 0,
+          "pointsFor": 1712.3799999999999,
+          "pointsAgainst": 1476.86,
+          "rankFinal": 2
+        },
+        {
+          "teamId": 12,
+          "name": "Chubbless Moon",
+          "wins": 7,
+          "losses": 7,
+          "ties": 0,
+          "pointsFor": 1405.6399999999996,
+          "pointsAgainst": 1439.72,
+          "rankFinal": 7
+        },
+        {
+          "teamId": 13,
+          "name": "Team Kolb",
+          "wins": 4,
+          "losses": 10,
+          "ties": 0,
+          "pointsFor": 1619.02,
+          "pointsAgainst": 1702.68,
+          "rankFinal": 9
+        },
+        {
+          "teamId": 14,
+          "name": "Hurts to the Core",
+          "wins": 5,
+          "losses": 9,
+          "ties": 0,
+          "pointsFor": 1437.3799999999999,
+          "pointsAgainst": 1619.94,
+          "rankFinal": 12
+        }
+      ]
+    }
+  ]
 }
