@@ -122,74 +122,37 @@ def _fetch_view_with_wrapper_then_http(view: str, year: int):
 
 def fetch_team_managers(league_id: int, year: int) -> dict[int, list[str]]:
     """
-    Returns {teamId: [manager display names...]} using multiple strategies:
-      A) mTeam + mMembers (wrapper-first, then HTTP)
-      B) espn_api.Team.owner / Team.owners fallback
+    Returns {teamId: [manager full names]} where each name is "First Last".
+    Falls back to displayName or nickname if no first/last.
     """
-    managers_by_team: dict[int, list[str]] = {}
+    base = f"https://fantasy.espn.com/apis/v3/games/ffl/seasons/{year}/segments/0/leagues/{league_id}"
 
-    # ---------- A) Try API views (preferred) ----------
-    raw_team = _fetch_view_with_wrapper_then_http("mTeam", year) or {}
-    raw_members = _fetch_view_with_wrapper_then_http("mMembers", year) or {}
-
-    # Build owner IDs per team (owners[] or primaryOwner)
+    # 1) Pull owners per team
     owners_map: dict[int, list[str]] = {}
+    raw_team = GET(base, params={"view": "mTeam"})
     for t in (raw_team.get("teams") or []):
         tid = t.get("id")
-        owners = list(t.get("owners", []) or [])
-        primary = t.get("primaryOwner")
-        if primary and primary not in owners:
-            owners.append(primary)
-        owners_map[tid] = owners
+        owners_map[tid] = list(t.get("owners", []) or [])
 
-    # Map member ID -> display name
+    # 2) Member directory (id → clean full name)
     members_map: dict[str, str] = {}
+    raw_members = GET(base, params={"view": "mMembers"})
     for m in (raw_members.get("members") or []):
         oid = m.get("id")
-        display = (
-            m.get("displayName")
-            or " ".join(x for x in [m.get("firstName"), m.get("lastName")] if x)
-            or m.get("nickname")
-            or m.get("email")
-            or oid
-        )
-        if oid:
-            members_map[oid] = display
+        if not oid:
+            continue
+        first = (m.get("firstName") or "").strip()
+        last = (m.get("lastName") or "").strip()
+        if first or last:
+            clean = f"{first} {last}".strip()
+        else:
+            clean = m.get("displayName") or m.get("nickname") or oid
+        members_map[oid] = clean
 
-    # Resolve names from owners_map + members_map
-    if owners_map:
-        for tid, owner_ids in owners_map.items():
-            if owner_ids:
-                managers_by_team[tid] = [members_map.get(oid, oid) for oid in owner_ids]
-
-    # ---------- B) espn_api fallback if still missing/empty ----------
-    # Many leagues expose a friendly string via t.owner or t.owners on the Team object.
-    # We’ll only add these if we have nothing from (A) or to fill blanks.
-    for team_obj in league.teams:
-        tid = team_obj.team_id
-        # espn_api exposes either a single string or a list (varies by version)
-        fallbacks: list[str] = []
-        # Try .owners (list-like)
-        if hasattr(team_obj, "owners"):
-            try:
-                if isinstance(team_obj.owners, (list, tuple)):
-                    fallbacks.extend([str(x) for x in team_obj.owners if x])
-                elif team_obj.owners:
-                    fallbacks.append(str(team_obj.owners))
-            except Exception:
-                pass
-        # Try .owner (single string)
-        if hasattr(team_obj, "owner"):
-            try:
-                if team_obj.owner:
-                    fallbacks.append(str(team_obj.owner))
-            except Exception:
-                pass
-
-        # If we already have names from (A), only fill empty
-        if tid not in managers_by_team or not managers_by_team[tid]:
-            if fallbacks:
-                managers_by_team[tid] = fallbacks
+    # 3) Resolve owners → names
+    managers_by_team: dict[int, list[str]] = {}
+    for tid, owner_ids in owners_map.items():
+        managers_by_team[tid] = [members_map.get(oid, oid) for oid in owner_ids]
 
     return managers_by_team
 
