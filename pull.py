@@ -571,6 +571,108 @@ human_settings = {
     "trade_deadline": getattr(s, "trade_deadline", None),
 }
 
+# --- SAFETY: always build teams_payload even if earlier views were empty ---
+try:
+    _ = teams_payload  # if already defined above, keep it
+except NameError:
+    # Build a minimal teams_payload from espn_api.Team objects
+    teams_payload = []
+    teams = league.teams
+    team_names = [t.team_name for t in teams]
+
+    # weekly_points fallback (handles week == 0 too)
+    weekly_points = {name: [] for name in team_names}
+    if week and week > 0:
+        for wk in range(1, week + 1):
+            try:
+                for g in (scoreboards.get(wk) or league.scoreboard(week=wk)):
+                    weekly_points[g.home_team.team_name].append(float(g.home_score))
+                    weekly_points[g.away_team.team_name].append(float(g.away_score))
+            except Exception:
+                pass
+
+    # PF/PA fallback + record
+    pf_tot = {t.team_name: float(getattr(t, "points_for", 0.0)) for t in teams}
+    pa_tot = {t.team_name: float(getattr(t, "points_against", 0.0)) for t in teams}
+    owners_map = {t.team_id: [] for t in teams}  # may be filled elsewhere if mTeam works
+
+    # Simple all-play & one-score fallbacks
+    allplay_expected_wins = {name: 0.0 for name in team_names}
+    one_score = {name: {"wins": 0, "losses": 0} for name in team_names}
+    if week and week > 0:
+        for wk in range(1, week + 1):
+            try:
+                games = (scoreboards.get(wk) or league.scoreboard(week=wk))
+            except Exception:
+                games = []
+            wk_scores = []
+            for g in games:
+                wk_scores.append((g.home_team.team_name, float(g.home_score)))
+                wk_scores.append((g.away_team.team_name, float(g.away_score)))
+                if getattr(g, "winner", None) is not None:
+                    margin = abs(g.home_score - g.away_score)
+                    if margin <= 10:
+                        winner = g.home_team.team_name if g.home_score > g.away_score else g.away_team.team_name
+                        loser  = g.away_team.team_name if winner == g.home_team.team_name else g.home_team.team_name
+                        one_score[winner]["wins"]  += 1
+                        one_score[loser]["losses"] += 1
+            if wk_scores:
+                scores_only = [sc for _, sc in wk_scores]
+                denom = max(1, len(scores_only) - 1)
+                for name, sc in wk_scores:
+                    beat = sum(1 for v in scores_only if sc > v)
+                    tie  = sum(1 for v in scores_only if sc == v) - 1
+                    allplay_expected_wins[name] += (beat + 0.5 * max(0, tie)) / denom
+
+    # H2H groups needs pf_tot ranking; if same/empty, it will just yield zeros
+    pf_sorted = sorted(pf_tot.items(), key=lambda x: x[1], reverse=True)
+    top5 = set([n for n, _ in pf_sorted[:5]])
+    bottom5 = set([n for n, _ in pf_sorted[-5:]]) if len(pf_sorted) >= 5 else set()
+
+    def h2h_groups(team_name):
+        wins_vs_top = wins_vs_bottom = 0
+        if not week or week <= 0:
+            return {"vs_top5_wins": 0, "vs_bottom5_wins": 0}
+        for wk in range(1, week + 1):
+            try:
+                games = (scoreboards.get(wk) or league.scoreboard(week=wk))
+            except Exception:
+                games = []
+            for g in games:
+                if team_name not in (g.home_team.team_name, g.away_team.team_name):
+                    continue
+                opp = g.away_team.team_name if team_name == g.home_team.team_name else g.home_team.team_name
+                won = ((g.home_score > g.away_score and team_name == g.home_team.team_name) or
+                       (g.away_score > g.home_score and team_name == g.away_team.team_name))
+                if won and opp in top5: wins_vs_top += 1
+                if won and opp in bottom5: wins_vs_bottom += 1
+        return {"vs_top5_wins": wins_vs_top, "vs_bottom5_wins": wins_vs_bottom}
+
+    # Build payload
+    for t in teams:
+        name = t.team_name
+        wp = weekly_points.get(name, [])
+        teams_payload.append({
+            "team_id": t.team_id,
+            "name": name,
+            "owners": owners_map.get(t.team_id, []),
+            "record": {
+                "wins": int(getattr(t, "wins", 0) or 0),
+                "losses": int(getattr(t, "losses", 0) or 0),
+                "ties": int(getattr(t, "ties", 0) or 0),
+            },
+            "points_for_total": round(pf_tot.get(name, 0.0), 2),
+            "points_against_total": round(pa_tot.get(name, 0.0), 2),
+            "weekly_points": [round(x, 2) for x in wp],
+            "recent_avg_last3": round(sum(wp[-3:]) / len(wp[-3:]) if wp[-3:] else 0.0, 2),
+            "stddev_points": round(pstdev(wp), 2) if len(wp) >= 2 else 0.0,
+            "sos_past_avg_opponent_pf": 0.0,  # filled in main path when schedule available
+            "close_games": one_score.get(name, {"wins": 0, "losses": 0}),
+            "head_to_head": h2h_groups(name),
+            "allplay_expected_wins": round(allplay_expected_wins.get(name, 0.0), 3),
+        })
+
+
 bundle = {
     "meta": {
         "generated_at_utc": dt.datetime.utcnow().isoformat(timespec="seconds") + "Z",
