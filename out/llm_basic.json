@@ -1,0 +1,169 @@
+{
+  "meta": {
+    "generated_at_utc": "2025-08-31T00:40:53Z",
+    "source": "espn_api + leagueHistory"
+  },
+  "league": {
+    "league_id": 63426,
+    "league_name": "Legen-Dairy League",
+    "season_year": 2025,
+    "team_count": 14
+  },
+  "teams_current": [
+    {
+      "team_id": 1,
+      "name": "The Union Strikes Back",
+      "record": {
+        "wins": 0,
+        "losses": 0,
+        "ties": 0
+      },
+      "points_for": 0.0,
+      "points_against": 0.0
+    },
+    {
+      "team_id": 2,
+      "name": "Koo Koo's Nest",
+      "record": {
+        "wins": 0,
+        "losses": 0,
+        "ties": 0
+      },
+      "points_for": 0.0,
+      "points_against": 0.0
+    },
+    {
+      "team_id": 3,
+      "name": "J-man\u2019s team",
+      "record": {
+        "wins": 0,
+        "losses": 0,
+        "ties": 0
+      },
+      "points_for": 0.0,
+      "points_against": 0.0
+    },
+    {
+      "team_id": 4,
+      "name": "Home Team",
+      "record": {
+        "wins": 0,
+        "losses": 0,
+        "ties": 0
+      },
+      "points_for": 0.0,
+      "points_against": 0.0
+    },
+    {
+      "team_id": 5,
+      "name": "For McCaffrey",
+      "record": {
+        "wins": 0,
+        "losses": 0,
+        "ties": 0
+      },
+      "points_for": 0.0,
+      "points_against": 0.0
+    },
+    {
+      "team_id": 6,
+      "name": "Team Hairy",
+      "record": {
+        "wins": 0,
+        "losses": 0,
+        "ties": 0
+      },
+      "points_for": 0.0,
+      "points_against": 0.0
+    },
+    {
+      "team_id": 7,
+      "name": "Go Go Gators",
+      "record": {
+        "wins": 0,
+        "losses": 0,
+        "ties": 0
+      },
+      "points_for": 0.0,
+      "points_against": 0.0
+    },
+    {
+      "team_id": 8,
+      "name": "Ragnar the Spoiled",
+      "record": {
+        "wins": 0,
+        "losses": 0,
+        "ties": 0
+      },
+      "points_for": 0.0,
+      "points_against": 0.0
+    },
+    {
+      "team_id": 9,
+      "name": "Anzalone Hair Jealousy",
+      "record": {
+        "wins": 0,
+        "losses": 0,
+        "ties": 0
+      },
+      "points_for": 0.0,
+      "points_against": 0.0
+    },
+    {
+      "team_id": 10,
+      "name": "The Separatists Rise Again",
+      "record": {
+        "wins": 0,
+        "losses": 0,
+        "ties": 0
+      },
+      "points_for": 0.0,
+      "points_against": 0.0
+    },
+    {
+      "team_id": 11,
+      "name": "Toddler Energy ",
+      "record": {
+        "wins": 0,
+        "losses": 0,
+        "ties": 0
+      },
+      "points_for": 0.0,
+      "points_against": 0.0
+    },
+    {
+      "team_id": 12,
+      "name": "HallOfBass",
+      "record": {
+        "wins": 0,
+        "losses": 0,
+        "ties": 0
+      },
+      "points_for": 0.0,
+      "points_against": 0.0
+    },
+    {
+      "team_id": 13,
+      "name": "Team Kolb",
+      "record": {
+        "wins": 0,
+        "losses": 0,
+        "ties": 0
+      },
+      "points_for": 0.0,
+      "points_against": 0.0
+    },
+    {
+      "team_id": 14,
+      "name": "Thirst Down and 10",
+      "record": {
+        "wins": 0,
+        "losses": 0,
+        "ties": 0
+      },
+      "points_for": 0.0,
+      "points_against": 0.0
+    }
+  ],
+  "history": []
+}
