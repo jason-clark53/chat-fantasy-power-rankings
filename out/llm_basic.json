@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at_utc": "2025-08-31T15:12:28Z",
+    "generated_at_utc": "2025-08-31T15:22:17Z",
     "source": "espn_api + leagueHistory"
   },
   "league": {
@@ -20,9 +20,7 @@
       },
       "points_for": 0.0,
       "points_against": 0.0,
-      "managers": [
-        "{'displayName': 'Jason6538', 'firstName': 'Jason', 'id': '{1260E2F1-8AA3-476D-A0E2-F18AA3D76D99}', 'lastName': 'Clark', 'notificationSettings': [{'enabled': True, 'id': '6bc57241-7a1b-3fe4-9606-975add922452', 'type': 'TEAM_PLAYER_INJURY'}, {'enabled': True, 'id': 'f7758308-3d85-3e29-a8f6-feec00fac201', 'type': 'TEAM_PLAYER_AVAILABILITY'}, {'enabled': True, 'id': 'c5eff49e-c9ba-338a-bf30-bf9add9d95ad', 'type': 'TEAM_PLAYER_NEWS'}, {'enabled': True, 'id': '602e65e9-01a4-38ce-b952-a0b8defc778a', 'type': 'TEAM_PLAYER_STARTBENCH'}, {'enabled': True, 'id': '64e63a4e-01fe-33b9-9957-989f24d94d4b', 'type': 'TEAM_TRADE_OFFER'}, {'enabled': True, 'id': '91783407-5a7b-3d9a-b190-377173f7a8d5', 'type': 'DRAFT'}, {'enabled': True, 'id': '98a8d8c9-6aa1-32a6-993c-a5cd3f1d3fc4', 'type': 'TEAM_MATCHUP_SCORE'}, {'enabled': True, 'id': 'e98d48ae-e158-3153-8194-f23879fff0df', 'type': 'KEY_PLAY'}, {'enabled': True, 'id': 'f8364175-ca14-389d-b990-7efc9115f3cb', 'type': 'REDZONE'}, {'enabled': True, 'id': '6cff64d8-f7bc-300d-aae2-c7a68d7d2366', 'type': 'ADD_DROP'}, {'enabled': True, 'id': '1017b930-9adc-3b5b-a602-31dececc3609', 'type': 'WEEKLY_RECAP'}, {'enabled': True, 'id': '2c9801ed-474f-354f-bc17-7e31eb96ef6b', 'type': 'WAIVERS'}, {'enabled': True, 'id': '2d40913d-86ab-330c-ba1a-f485384384b6', 'type': 'CELEBRATION_SHARE'}]}"
-      ]
+      "managers": []
     },
     {
       "team_id": 2,
@@ -34,9 +32,7 @@
       },
       "points_for": 0.0,
       "points_against": 0.0,
-      "managers": [
-        "{'displayName': 'clark16148036', 'firstName': 'Charlie', 'id': '{6A114B15-3BDC-4B1A-A218-9374B04FC101}', 'lastName': 'Clark', 'notificationSettings': [{'enabled': True, 'id': '587f2622-2236-3b67-b69f-60d26154c4ea', 'type': 'TEAM_PLAYER_INJURY'}, {'enabled': True, 'id': 'f7c19076-c917-3237-a22b-439c10729916', 'type': 'TEAM_PLAYER_AVAILABILITY'}, {'enabled': True, 'id': '250051f6-6873-313f-91dd-48af2d8c3c76', 'type': 'TEAM_PLAYER_NEWS'}, {'enabled': True, 'id': 'bfd62731-e739-3bcf-8955-d0d213c85fa2', 'type': 'TEAM_PLAYER_STARTBENCH'}, {'enabled': True, 'id': '18517c27-618d-3f11-878a-6796bf109038', 'type': 'TEAM_TRADE_OFFER'}, {'enabled': True, 'id': '7ea2414d-41c0-36b5-b139-60765e1a8cb5', 'type': 'DRAFT'}, {'enabled': True, 'id': 'a632f62a-3bb4-38af-9d2b-36ffb3900c0b', 'type': 'TEAM_MATCHUP_SCORE'}, {'enabled': True, 'id': '81e36bab-b03f-37c2-892f-9cb6aa0776d0', 'type': 'KEY_PLAY'}, {'enabled': True, 'id': '7fb69b14-78a1-3909-b8c6-68c3368a4f23', 'type': 'REDZONE'}, {'enabled': True, 'id': '0969c101-675c-3f3f-9174-632cd21c90a2', 'type': 'ADD_DROP'}, {'enabled': True, 'id': 'e1861c4b-97e6-338a-8caa-5b2bcf6c6148', 'type': 'WEEKLY_RECAP'}, {'enabled': True, 'id': 'cbb14fb6-a84e-3403-aebc-b0838a062b26', 'type': 'WAIVERS'}, {'enabled': True, 'id': '492d0c2a-308a-3268-afa0-1da3d274bf41', 'type': 'CELEBRATION_SHARE'}]}"
-      ]
+      "managers": []
     },
     {
       "team_id": 3,
@@ -48,10 +44,7 @@
       },
       "points_for": 0.0,
       "points_against": 0.0,
-      "managers": [
-        "{'displayName': 'bbarnaby18', 'firstName': 'Buffy', 'id': '{0E4F6B7C-999B-477E-BFD7-42682DFE6AA5}', 'lastName': 'Barnaby', 'notificationSettings': [{'enabled': True, 'id': '65300d0d-4028-35a7-a6c7-9719040e2dd2', 'type': 'TEAM_PLAYER_INJURY'}, {'enabled': True, 'id': 'f1ea36ba-50c9-3610-8619-792d86d79d32', 'type': 'TEAM_PLAYER_AVAILABILITY'}, {'enabled': True, 'id': '890e2a55-9618-3faa-8657-a199edd12cd0', 'type': 'TEAM_PLAYER_NEWS'}, {'enabled': True, 'id': 'bfe7673d-88ce-30d3-b647-642151cdcad5', 'type': 'TEAM_PLAYER_STARTBENCH'}, {'enabled': True, 'id': '57ffb036-8a05-359f-a382-03a6583eda67', 'type': 'TEAM_TRADE_OFFER'}, {'enabled': True, 'id': '5edba9dd-4335-3e55-ba13-493a6b50ea3b', 'type': 'DRAFT'}, {'enabled': True, 'id': '05ef861d-83fa-3672-ae3f-2b41e1baa21f', 'type': 'TEAM_MATCHUP_SCORE'}, {'enabled': True, 'id': '9d2c895f-012b-3344-a0f4-854ffff6c242', 'type': 'KEY_PLAY'}, {'enabled': True, 'id': '120945f7-e186-35f4-8608-38f4be8cabeb', 'type': 'REDZONE'}, {'enabled': True, 'id': '904d4044-1790-32b9-bc07-a39f7c6c69b5', 'type': 'ADD_DROP'}, {'enabled': True, 'id': '54731407-bf80-34c4-8af0-b555931f5d43', 'type': 'WEEKLY_RECAP'}, {'enabled': True, 'id': '75e21831-1719-3a4a-a5da-d39b846276bd', 'type': 'WAIVERS'}, {'enabled': True, 'id': '25a7e322-6f7f-32c6-ad01-f331385304d7', 'type': 'CELEBRATION_SHARE'}]}",
-        "{'displayName': 'JulianJames', 'firstName': 'Julian', 'id': '{F4D2B059-BC1F-4298-AD17-AB012AF4B219}', 'lastName': 'Barnaby', 'notificationSettings': [{'enabled': True, 'id': '3ff06e3f-bd12-3d7f-bc7a-4b7461e9ae24', 'type': 'TEAM_PLAYER_INJURY'}, {'enabled': True, 'id': '7cef08b3-4b56-3cec-80d1-47221c6c1582', 'type': 'TEAM_PLAYER_AVAILABILITY'}, {'enabled': True, 'id': 'd33b9ce1-212a-3bd3-af00-2aadd9350c3f', 'type': 'TEAM_PLAYER_NEWS'}, {'enabled': True, 'id': '202b5251-e719-3a6b-aae6-2139c2199e54', 'type': 'TEAM_PLAYER_STARTBENCH'}, {'enabled': True, 'id': 'ef0cccef-8a72-3e45-808c-9a4e2afc1232', 'type': 'TEAM_TRADE_OFFER'}, {'enabled': True, 'id': '5ba1b273-4a6a-3b71-a570-8d4ab98a5d39', 'type': 'DRAFT'}, {'enabled': True, 'id': 'd18ffa88-968a-3fd8-8e4f-b3befae0cd5f', 'type': 'TEAM_MATCHUP_SCORE'}, {'enabled': True, 'id': 'a567cab3-50d9-3124-92a2-362b992a1bd2', 'type': 'KEY_PLAY'}, {'enabled': True, 'id': 'd310af09-3a16-38c0-a833-ef301deec340', 'type': 'REDZONE'}, {'enabled': True, 'id': '002da132-b759-3e83-90ac-99c180fb8727', 'type': 'ADD_DROP'}, {'enabled': True, 'id': '0dabe2d6-2b82-33bd-aab9-690d28ccf890', 'type': 'WEEKLY_RECAP'}, {'enabled': True, 'id': 'e6eac7fe-5620-38a0-a266-a97ccb26c409', 'type': 'WAIVERS'}, {'enabled': True, 'id': '96e175a5-95fa-3178-8cc6-95ea14d7114e', 'type': 'CELEBRATION_SHARE'}]}"
-      ]
+      "managers": []
     },
     {
       "team_id": 4,
@@ -63,9 +56,7 @@
       },
       "points_for": 0.0,
       "points_against": 0.0,
-      "managers": [
-        "{'displayName': 'clarkd9033969', 'firstName': 'Don', 'id': '{8C33683C-A27C-4CCC-B093-753154B0C846}', 'lastName': 'Clark', 'notificationSettings': [{'enabled': True, 'id': '7e8fcd9f-ec07-37d7-b294-5e610d13193f', 'type': 'TEAM_PLAYER_INJURY'}, {'enabled': True, 'id': '51375a5c-f21e-38c3-94d8-e7a2e642ca6e', 'type': 'TEAM_PLAYER_AVAILABILITY'}, {'enabled': True, 'id': '21b7d564-7d24-3c08-a51e-c42dc35425c5', 'type': 'TEAM_PLAYER_NEWS'}, {'enabled': True, 'id': '6e18833f-736b-3848-97f4-4ffe994d0762', 'type': 'TEAM_PLAYER_STARTBENCH'}, {'enabled': True, 'id': '4dbefc25-d32a-359e-a951-784af0f15b14', 'type': 'TEAM_TRADE_OFFER'}, {'enabled': True, 'id': '0d1060d4-a647-339f-b4d1-4129be4ac094', 'type': 'DRAFT'}, {'enabled': True, 'id': 'e6f3283c-a7c0-31d1-92fd-dec1471a5c03', 'type': 'TEAM_MATCHUP_SCORE'}, {'enabled': True, 'id': '2c541c07-ae06-3cab-bfff-499428f54589', 'type': 'KEY_PLAY'}, {'enabled': True, 'id': 'a6ab8426-a173-36ca-bd9a-fa25f6493942', 'type': 'REDZONE'}, {'enabled': True, 'id': '60d1f19e-5026-3d7f-8642-e73760159318', 'type': 'ADD_DROP'}, {'enabled': True, 'id': 'c2480798-6d81-3d45-a7fe-5b79f48afabe', 'type': 'WEEKLY_RECAP'}, {'enabled': True, 'id': '7729d763-0075-3189-9c74-911d37cb487d', 'type': 'WAIVERS'}, {'enabled': True, 'id': '425eddbb-0e07-34b5-a2f2-551baf5c83f8', 'type': 'CELEBRATION_SHARE'}]}"
-      ]
+      "managers": []
     },
     {
       "team_id": 5,
@@ -77,9 +68,7 @@
       },
       "points_for": 0.0,
       "points_against": 0.0,
-      "managers": [
-        "{'displayName': 'bc19cl8725199', 'firstName': 'Joe', 'id': '{5C6B2DE7-DD02-4DD0-8BF6-0DEA6215E467}', 'lastName': 'Clark', 'notificationSettings': [{'enabled': True, 'id': '871b7ec0-d575-3c44-ae2f-898c08006bb3', 'type': 'TEAM_PLAYER_INJURY'}, {'enabled': True, 'id': '0d778923-8b3e-371c-b10a-e612e820fc03', 'type': 'TEAM_PLAYER_AVAILABILITY'}, {'enabled': True, 'id': 'fc7725e3-f217-3bf5-9160-560ec0d09c00', 'type': 'TEAM_PLAYER_NEWS'}, {'enabled': True, 'id': 'd270bc19-8b4d-3c14-9a6f-ed69ce94b30a', 'type': 'TEAM_PLAYER_STARTBENCH'}, {'enabled': True, 'id': '76789af6-03aa-3aff-aa26-34082f8867dc', 'type': 'TEAM_TRADE_OFFER'}, {'enabled': True, 'id': '03bb7cc5-dd93-3588-8bb9-bf446f1f7afa', 'type': 'DRAFT'}, {'enabled': True, 'id': '5aee7e99-c5c2-329a-9885-748dc809fd94', 'type': 'TEAM_MATCHUP_SCORE'}, {'enabled': True, 'id': 'bb371aee-aec3-30c4-810f-42076a6aa860', 'type': 'KEY_PLAY'}, {'enabled': True, 'id': '8cb94b16-7445-357c-849b-3dd2110a13ee', 'type': 'REDZONE'}, {'enabled': True, 'id': 'bf91c70e-2251-369b-b50d-1080671f43a4', 'type': 'ADD_DROP'}, {'enabled': True, 'id': '4d32c83f-f46e-3292-a546-5aa32a81ca3d', 'type': 'WEEKLY_RECAP'}, {'enabled': True, 'id': '0307a080-3bf7-3126-bd50-97f99516d1cb', 'type': 'WAIVERS'}, {'enabled': True, 'id': '49a16e48-8a32-3564-8921-a59d2e7dfef6', 'type': 'CELEBRATION_SHARE'}]}"
-      ]
+      "managers": []
     },
     {
       "team_id": 6,
@@ -91,9 +80,7 @@
       },
       "points_for": 0.0,
       "points_against": 0.0,
-      "managers": [
-        "{'displayName': '04Annette24', 'firstName': 'Annette', 'id': '{EA908FE9-A53C-4436-908F-E9A53C6436D7}', 'lastName': 'Clark', 'notificationSettings': [{'enabled': True, 'id': '615ae483-f33c-3320-8681-6249d3fb664f', 'type': 'TEAM_PLAYER_INJURY'}, {'enabled': True, 'id': '0f0d475d-2c8e-3289-bda9-a5c757ff78c5', 'type': 'TEAM_PLAYER_AVAILABILITY'}, {'enabled': True, 'id': 'd2b3cbbd-07cc-33c2-b501-4f300e49b509', 'type': 'TEAM_PLAYER_NEWS'}, {'enabled': True, 'id': '8af71ad7-ae4b-380c-81d9-cc86b19c372d', 'type': 'TEAM_PLAYER_STARTBENCH'}, {'enabled': True, 'id': 'b49fcb31-cc03-3d2b-8ed2-5bd5e39a5435', 'type': 'TEAM_TRADE_OFFER'}, {'enabled': True, 'id': 'ff83af95-7a59-3261-9e24-8b7a62797f0e', 'type': 'DRAFT'}, {'enabled': True, 'id': '87f7070b-442d-3eeb-8781-56c3db587776', 'type': 'TEAM_MATCHUP_SCORE'}, {'enabled': True, 'id': 'f6407418-18fb-3057-a98f-628abe7f71be', 'type': 'KEY_PLAY'}, {'enabled': True, 'id': 'dd59f9a8-40e3-35b0-9be3-5228edca77bd', 'type': 'REDZONE'}, {'enabled': True, 'id': '493702fa-b57c-3404-a692-9292d98a8fcc', 'type': 'ADD_DROP'}, {'enabled': True, 'id': '1418339c-cd84-3960-8e6e-52a87ee37d71', 'type': 'WEEKLY_RECAP'}, {'enabled': True, 'id': 'c27f7ce8-9b9c-311d-8ef3-31825469fff7', 'type': 'WAIVERS'}, {'enabled': True, 'id': 'f1783d93-b12b-37e1-a380-9a5b6e062526', 'type': 'CELEBRATION_SHARE'}]}"
-      ]
+      "managers": []
     },
     {
       "team_id": 7,
@@ -105,10 +92,7 @@
       },
       "points_for": 0.0,
       "points_against": 0.0,
-      "managers": [
-        "{'displayName': 'jmwcla8645795', 'firstName': 'Jane', 'id': '{4D51CDF2-EFCC-43BF-AF95-1FFF870D2DC1}', 'lastName': 'Clark', 'notificationSettings': [{'enabled': True, 'id': 'ec98d19e-c3e5-3d15-bd87-721966d1ecab', 'type': 'TEAM_PLAYER_INJURY'}, {'enabled': True, 'id': '3c6e52f8-6993-3793-8e02-0cacdb75847c', 'type': 'TEAM_PLAYER_AVAILABILITY'}, {'enabled': True, 'id': '025d25c0-04d9-3a9f-83f0-afced4e48b67', 'type': 'TEAM_PLAYER_NEWS'}, {'enabled': True, 'id': '3851326e-3c96-37fd-9f37-82bd282380b6', 'type': 'TEAM_PLAYER_STARTBENCH'}, {'enabled': True, 'id': '4a7094c1-d4b6-3b52-9398-c0e38d9d960f', 'type': 'TEAM_TRADE_OFFER'}, {'enabled': True, 'id': '38e190d6-fb72-3232-9164-eeb455e87346', 'type': 'DRAFT'}, {'enabled': True, 'id': '09499d50-e32c-3367-8786-93e33e2bfa55', 'type': 'TEAM_MATCHUP_SCORE'}, {'enabled': True, 'id': '09fe51af-bd11-305a-907a-49cca0d9d35c', 'type': 'KEY_PLAY'}, {'enabled': True, 'id': '7ce94d53-52a8-3d58-80e5-ab6941678eae', 'type': 'REDZONE'}, {'enabled': True, 'id': 'b751f94e-6e91-30e3-81b6-f250e641325a', 'type': 'ADD_DROP'}, {'enabled': True, 'id': '3b38c21c-cbb6-3faa-86ab-e718a9c7245b', 'type': 'WEEKLY_RECAP'}, {'enabled': True, 'id': 'ccd99a83-656a-3698-b079-e6153f73aea5', 'type': 'WAIVERS'}, {'enabled': True, 'id': '53d43de7-c9ed-30e9-a663-ae6064141b78', 'type': 'CELEBRATION_SHARE'}]}",
-        "{'displayName': 'ESPNfan1304999669', 'firstName': 'Ray', 'id': '{95276922-CEEB-4CA2-9FD4-86B8C6B8B6BF}', 'lastName': 'Clark', 'notificationSettings': [{'enabled': True, 'id': '9ed3afc0-13b5-3bb3-be05-6f597c3a84a1', 'type': 'TEAM_PLAYER_INJURY'}, {'enabled': True, 'id': '1cd88a43-66e4-328e-b294-f1ee48600ef5', 'type': 'TEAM_PLAYER_AVAILABILITY'}, {'enabled': True, 'id': 'e77b1e24-304e-3f58-9f76-527adbd6eb5f', 'type': 'TEAM_PLAYER_NEWS'}, {'enabled': True, 'id': 'b6986d24-f60f-388b-a050-0007697dade8', 'type': 'TEAM_PLAYER_STARTBENCH'}, {'enabled': True, 'id': '31f8d531-3586-3ea7-b666-c10ba61a739a', 'type': 'TEAM_TRADE_OFFER'}, {'enabled': True, 'id': '38b1f1a3-4415-3440-b960-38640be8a8a9', 'type': 'DRAFT'}, {'enabled': True, 'id': '22ed8d99-8864-36e3-b45d-d258e226b8db', 'type': 'TEAM_MATCHUP_SCORE'}, {'enabled': True, 'id': 'c03fe493-d6b1-3217-a694-95175d494bc7', 'type': 'KEY_PLAY'}, {'enabled': True, 'id': '10a50d30-e1b2-3b85-b6e3-4562bd87fd5f', 'type': 'REDZONE'}, {'enabled': True, 'id': 'f6c09708-3f4e-3fa1-a3e3-f759066af3f6', 'type': 'ADD_DROP'}, {'enabled': True, 'id': 'd19c60a3-e279-30ea-a76c-733a37f1118c', 'type': 'WEEKLY_RECAP'}, {'enabled': True, 'id': '50f13114-543b-3517-81df-57e5ed670c7c', 'type': 'WAIVERS'}, {'enabled': True, 'id': 'fa881cc4-0792-3255-a7d3-c53c2104ba19', 'type': 'CELEBRATION_SHARE'}]}"
-      ]
+      "managers": []
     },
     {
       "team_id": 8,
@@ -120,9 +104,7 @@
       },
       "points_for": 0.0,
       "points_against": 0.0,
-      "managers": [
-        "{'displayName': 'katy_p6270383', 'firstName': 'Katy', 'id': '{225592E6-172A-43B3-95DE-334028E38ECE}', 'lastName': 'Phelps', 'notificationSettings': [{'enabled': True, 'id': '23cd865c-b754-3a8d-bc69-020fa430b68c', 'type': 'TEAM_PLAYER_INJURY'}, {'enabled': True, 'id': 'c92bb6a6-6a38-3152-975b-cf39c3162ff8', 'type': 'TEAM_PLAYER_AVAILABILITY'}, {'enabled': True, 'id': '2bdcec86-c369-3079-9289-995db19fe10b', 'type': 'TEAM_PLAYER_NEWS'}, {'enabled': True, 'id': '54c457b2-e6ca-3a63-a898-3f431cabc982', 'type': 'TEAM_PLAYER_STARTBENCH'}, {'enabled': True, 'id': 'aaa0444a-f91c-3f76-892a-49c11d487373', 'type': 'TEAM_TRADE_OFFER'}, {'enabled': True, 'id': 'ce705e4d-e3b3-357e-b1be-1d94fbddbfac', 'type': 'DRAFT'}, {'enabled': True, 'id': '738ac5a8-7d66-3661-897f-04d7d02ba909', 'type': 'TEAM_MATCHUP_SCORE'}, {'enabled': True, 'id': '18c6a3c6-29d0-3410-8003-1654b0dd80ce', 'type': 'KEY_PLAY'}, {'enabled': True, 'id': 'c05acd43-78c1-35b3-8ab1-293ccee9af81', 'type': 'REDZONE'}, {'enabled': True, 'id': 'ad8a5fa7-6956-3282-b3df-c2f9caf3c8ef', 'type': 'ADD_DROP'}, {'enabled': True, 'id': '8f1b59a1-1e42-3b2e-bc3a-c3862a8d37c8', 'type': 'WEEKLY_RECAP'}, {'enabled': True, 'id': 'a888b0ab-5c75-3190-808a-d082ee458529', 'type': 'WAIVERS'}, {'enabled': True, 'id': 'bcdea0cd-bb68-30c0-9cc5-8f89bd859bfb', 'type': 'CELEBRATION_SHARE'}]}"
-      ]
+      "managers": []
     },
     {
       "team_id": 9,
@@ -134,9 +116,7 @@
       },
       "points_for": 0.0,
       "points_against": 0.0,
-      "managers": [
-        "{'displayName': 'JillHall2', 'firstName': 'Jillian', 'id': '{E13EE4DB-A054-499B-A434-F73844710FAC}', 'lastName': 'Hall', 'notificationSettings': [{'enabled': True, 'id': '57d75c5b-8753-3c89-a772-b1a0b6f3e153', 'type': 'TEAM_PLAYER_INJURY'}, {'enabled': True, 'id': '23db6352-e934-39ef-b92c-3e96fc90c2c9', 'type': 'TEAM_PLAYER_AVAILABILITY'}, {'enabled': True, 'id': '2dcb2723-fd59-356a-8d4f-4d8594fe463f', 'type': 'TEAM_PLAYER_NEWS'}, {'enabled': True, 'id': 'e3f0635a-6728-386e-95d3-faf6f45279c3', 'type': 'TEAM_PLAYER_STARTBENCH'}, {'enabled': True, 'id': '42e0f818-f512-3535-94a9-2d04b2dc889c', 'type': 'TEAM_TRADE_OFFER'}, {'enabled': True, 'id': '7569ef7f-d37c-38c1-b580-a16e23c64beb', 'type': 'DRAFT'}, {'enabled': True, 'id': 'f08ab275-fe0b-3932-964d-951a1f3dd860', 'type': 'TEAM_MATCHUP_SCORE'}, {'enabled': True, 'id': '003e34c5-2c9c-3df9-b3a3-f003ee6daf6a', 'type': 'KEY_PLAY'}, {'enabled': True, 'id': '115c86f7-a0ff-34e0-9856-73dd2e119edd', 'type': 'REDZONE'}, {'enabled': True, 'id': 'fbc69ec5-9b15-3906-9b5a-ffc9f4c19ffc', 'type': 'ADD_DROP'}, {'enabled': True, 'id': '326b5d33-357e-3de2-b0a3-5c4dfb362960', 'type': 'WEEKLY_RECAP'}, {'enabled': True, 'id': '89202840-72d7-3bc6-8f36-1e329daa1339', 'type': 'WAIVERS'}, {'enabled': True, 'id': '1bf9fcb6-2b6c-3733-a570-f9debaf59f9e', 'type': 'CELEBRATION_SHARE'}]}"
-      ]
+      "managers": []
     },
     {
       "team_id": 10,
@@ -148,9 +128,7 @@
       },
       "points_for": 0.0,
       "points_against": 0.0,
-      "managers": [
-        "{'displayName': 'Jesse.thompson05', 'firstName': 'Jesse', 'id': '{251668AB-DE01-4DA0-9668-ABDE01ADA057}', 'lastName': 'Thompson', 'notificationSettings': [{'enabled': True, 'id': '469e96c3-95fb-38da-a61b-c4af24c69f5d', 'type': 'TEAM_PLAYER_INJURY'}, {'enabled': True, 'id': 'c16840b8-4a59-3203-bcc0-efcf892e87b9', 'type': 'TEAM_PLAYER_AVAILABILITY'}, {'enabled': True, 'id': '63745c9e-2846-31cf-bb98-ac561e48f0a0', 'type': 'TEAM_PLAYER_NEWS'}, {'enabled': True, 'id': '9366936b-1393-3408-9dcb-90ada4b071fe', 'type': 'TEAM_PLAYER_STARTBENCH'}, {'enabled': True, 'id': '7d3b9015-a3e4-3c3f-8838-a8f811d58e3e', 'type': 'TEAM_TRADE_OFFER'}, {'enabled': True, 'id': '2adf4ecb-364b-3dc3-9ea5-3a8385096b4a', 'type': 'DRAFT'}, {'enabled': True, 'id': 'fd55793e-01cf-3c51-8fbc-3fa179b4c53a', 'type': 'TEAM_MATCHUP_SCORE'}, {'enabled': True, 'id': '5ffe3cf8-3343-3d3a-a9d6-9da491039414', 'type': 'KEY_PLAY'}, {'enabled': True, 'id': '47b6c74b-15fa-3816-8cce-d9042825f53b', 'type': 'REDZONE'}, {'enabled': True, 'id': '4b05bdae-08ef-3df2-8bf8-a7a4089bf1bc', 'type': 'ADD_DROP'}, {'enabled': True, 'id': '0bcaab4a-94f2-3277-a575-f5f13d5d0b74', 'type': 'WEEKLY_RECAP'}, {'enabled': True, 'id': 'c9ad26cd-1cad-382f-80f9-cb92c8c71d19', 'type': 'WAIVERS'}, {'enabled': True, 'id': 'd91b3137-be92-3358-8435-f0a21c23588f', 'type': 'CELEBRATION_SHARE'}]}"
-      ]
+      "managers": []
     },
     {
       "team_id": 11,
@@ -162,9 +140,7 @@
       },
       "points_for": 0.0,
       "points_against": 0.0,
-      "managers": [
-        "{'displayName': 'ESPNFAN8247583719', 'firstName': 'Elton', 'id': '{0043659B-22B8-4D2E-B1EA-5D209331BE95}', 'lastName': 'Clark', 'notificationSettings': [{'enabled': True, 'id': 'ad22e533-58ad-3a90-8048-63b4b4b79d9a', 'type': 'TEAM_PLAYER_INJURY'}, {'enabled': True, 'id': 'ac108c67-8470-31fa-a717-62f130f6ecf6', 'type': 'TEAM_PLAYER_AVAILABILITY'}, {'enabled': True, 'id': '78370557-1f23-3f3f-b39b-551bd05af17a', 'type': 'TEAM_PLAYER_NEWS'}, {'enabled': True, 'id': 'dcbb8850-e7ca-3d42-ad80-bd1070727d24', 'type': 'TEAM_PLAYER_STARTBENCH'}, {'enabled': True, 'id': 'e7323fb6-3a63-313d-ac07-f0539493c54b', 'type': 'TEAM_TRADE_OFFER'}, {'enabled': True, 'id': '93282d75-d04a-34ce-824b-1a42ce1a5771', 'type': 'DRAFT'}, {'enabled': True, 'id': 'e9818de7-e9f8-3203-96fe-45640b113af3', 'type': 'TEAM_MATCHUP_SCORE'}, {'enabled': True, 'id': 'f16eb914-5105-3977-bb8d-489ff4d2c526', 'type': 'KEY_PLAY'}, {'enabled': True, 'id': '011341d0-437e-3d9e-baf7-0fb9a7f8c4db', 'type': 'REDZONE'}, {'enabled': True, 'id': '41f2fa36-a07f-342b-a9eb-b3e25b811998', 'type': 'ADD_DROP'}, {'enabled': True, 'id': '140ac771-f1db-3f89-a8c9-067176091dfe', 'type': 'WEEKLY_RECAP'}, {'enabled': True, 'id': 'a091088a-5305-3542-959d-4d87b7b6f557', 'type': 'WAIVERS'}, {'enabled': True, 'id': '1b088174-1d9e-3936-a64e-d78cb8adcf8b', 'type': 'CELEBRATION_SHARE'}]}"
-      ]
+      "managers": []
     },
     {
       "team_id": 12,
@@ -176,9 +152,7 @@
       },
       "points_for": 0.0,
       "points_against": 0.0,
-      "managers": [
-        "{'displayName': 'Killed By Death', 'firstName': 'Todd', 'id': '{84129A67-A800-4168-929A-67A80001683B}', 'lastName': 'Phelps', 'notificationSettings': [{'enabled': True, 'id': '86b78aef-7d86-3136-89c6-82123e872c4b', 'type': 'TEAM_PLAYER_INJURY'}, {'enabled': True, 'id': '3494df6e-fb05-30a0-83ab-1d4580c251bc', 'type': 'TEAM_PLAYER_AVAILABILITY'}, {'enabled': True, 'id': 'ec1fad2f-4d97-3527-9c60-f088feb60e99', 'type': 'TEAM_PLAYER_NEWS'}, {'enabled': True, 'id': 'b7da760a-823b-3d82-9af5-e92a1c353e25', 'type': 'TEAM_PLAYER_STARTBENCH'}, {'enabled': True, 'id': 'ec848c45-4446-38c4-a36e-ad13a7334426', 'type': 'TEAM_TRADE_OFFER'}, {'enabled': True, 'id': 'bbaccd60-9ec1-33a3-987e-3afa86d5367f', 'type': 'DRAFT'}, {'enabled': True, 'id': '6b74880d-df1a-3750-8d75-3ae367de78f0', 'type': 'TEAM_MATCHUP_SCORE'}, {'enabled': True, 'id': 'dc170f78-f30b-30f8-a1dd-27692072ef6b', 'type': 'KEY_PLAY'}, {'enabled': True, 'id': 'ea6f4aed-5431-3efd-9f12-84419c47537c', 'type': 'REDZONE'}, {'enabled': True, 'id': '88457332-c443-38fe-8947-c95df98d8aad', 'type': 'ADD_DROP'}, {'enabled': True, 'id': '27a3d14a-6a04-3ccb-b7ed-1b9cbb7a7755', 'type': 'WEEKLY_RECAP'}, {'enabled': True, 'id': '04f5cab2-1cd5-3405-8d9c-10c4da9f962d', 'type': 'WAIVERS'}, {'enabled': True, 'id': '93c92ae6-5d1f-39a2-9189-11820b2eaad1', 'type': 'CELEBRATION_SHARE'}]}"
-      ]
+      "managers": []
     },
     {
       "team_id": 13,
@@ -190,9 +164,7 @@
       },
       "points_for": 0.0,
       "points_against": 0.0,
-      "managers": [
-        "{'displayName': 'espn80205819', 'firstName': 'Nate', 'id': '{C112EDB8-D503-43C0-9CFE-5FB7E9424903}', 'lastName': 'Kolb', 'notificationSettings': [{'enabled': True, 'id': 'd651b692-8355-3651-b498-82cd61d1c396', 'type': 'TEAM_PLAYER_INJURY'}, {'enabled': True, 'id': 'e3f03967-e075-3eaa-a0c9-3db4064260b7', 'type': 'TEAM_PLAYER_AVAILABILITY'}, {'enabled': True, 'id': '1c186709-fff4-347c-91dd-ca4f338c39b7', 'type': 'TEAM_PLAYER_NEWS'}, {'enabled': True, 'id': '688bc705-aa69-3061-bee4-0a499082b4d7', 'type': 'TEAM_PLAYER_STARTBENCH'}, {'enabled': True, 'id': '172b3fec-d380-3f92-8cc5-a2d6d144b475', 'type': 'TEAM_TRADE_OFFER'}, {'enabled': True, 'id': '35ef5474-c00e-30e2-9e25-49430cae2e16', 'type': 'DRAFT'}, {'enabled': True, 'id': 'c685221e-4685-3200-a74c-0f059d2199c0', 'type': 'TEAM_MATCHUP_SCORE'}, {'enabled': True, 'id': '05d48371-0991-399f-955b-e0fa703c88c7', 'type': 'KEY_PLAY'}, {'enabled': True, 'id': '10cc0520-8194-3577-954b-46fa39bd7586', 'type': 'REDZONE'}, {'enabled': True, 'id': '7ac40135-5b85-3b6e-a4f4-737f6a0a17be', 'type': 'ADD_DROP'}, {'enabled': True, 'id': '955566aa-a298-3ddf-a5c1-e6e6902e1732', 'type': 'WEEKLY_RECAP'}, {'enabled': True, 'id': 'c3f91a78-4cc1-3002-bcea-e58fad02077b', 'type': 'WAIVERS'}, {'enabled': True, 'id': 'ef05d7ea-bce4-3e2e-b716-e4009380cba1', 'type': 'CELEBRATION_SHARE'}]}"
-      ]
+      "managers": []
     },
     {
       "team_id": 14,
@@ -204,9 +176,7 @@
       },
       "points_for": 0.0,
       "points_against": 0.0,
-      "managers": [
-        "{'displayName': 'ESPNfan2776322276', 'firstName': 'Sheila', 'id': '{57905203-A0D3-4561-8CFF-FFBACFCD2806}', 'lastName': 'Barnaby', 'notificationSettings': [{'enabled': True, 'id': '48497703-6bdd-3319-8541-c22a5bb13245', 'type': 'TEAM_PLAYER_INJURY'}, {'enabled': True, 'id': '0fb5ee70-8efc-3389-8988-5b248e912ebb', 'type': 'TEAM_PLAYER_AVAILABILITY'}, {'enabled': True, 'id': 'cda34488-618f-33c8-9bcb-08081322e2e6', 'type': 'TEAM_PLAYER_NEWS'}, {'enabled': True, 'id': 'c860e307-8922-380d-934b-3e22f2857171', 'type': 'TEAM_PLAYER_STARTBENCH'}, {'enabled': True, 'id': 'cf184fd0-c8fa-39a3-adc2-30e7f66b235b', 'type': 'TEAM_TRADE_OFFER'}, {'enabled': True, 'id': 'd7708066-03ec-35a1-b3f1-0ff9cc25dc0e', 'type': 'DRAFT'}, {'enabled': True, 'id': '310e3b7f-1cac-3306-b028-0f7d5b89b1b3', 'type': 'TEAM_MATCHUP_SCORE'}, {'enabled': True, 'id': '2e5bba2c-64f4-355c-b330-a91029b77ee6', 'type': 'KEY_PLAY'}, {'enabled': True, 'id': 'd87ac082-f81a-3f8b-9d95-75be970829c3', 'type': 'REDZONE'}, {'enabled': True, 'id': 'acc111ce-7a44-3e7a-ae73-9824d28898de', 'type': 'ADD_DROP'}, {'enabled': True, 'id': 'e29db500-120f-309d-845a-80aef6834a9b', 'type': 'WEEKLY_RECAP'}, {'enabled': True, 'id': 'd6979590-c14e-3e5b-bddc-5470084848a2', 'type': 'WAIVERS'}, {'enabled': True, 'id': 'd11f5300-bfef-304a-83e1-61b1171bf741', 'type': 'CELEBRATION_SHARE'}]}"
-      ]
+      "managers": []
     }
   ],
   "history": [
