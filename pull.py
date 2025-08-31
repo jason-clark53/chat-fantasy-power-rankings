@@ -107,32 +107,52 @@ def GET(url, params=None, timeout=20, retries=3, backoff=0.6):
     return {}
 
 # ================================
-# Team managers (owner display names)
+# Team managers (owner display names) — robust
 # ================================
+def _fetch_view_with_wrapper_then_http(view: str, year: int):
+    """
+    Try league._fetch_league(params={'view': view}) first (uses the espn_api session),
+    then fall back to raw GET.
+    """
+    # wrapper first
+    try:
+        data = league._fetch_league(params={"view": view})
+        if isinstance(data, dict) and data:
+            return data
+    except Exception:
+        pass
+
+    # raw HTTP fallback
+    base = f"https://fantasy.espn.com/apis/v3/games/ffl/seasons/{year}/segments/0/leagues/{LEAGUE_ID}"
+    return GET(base, params={"view": view})
+
 def fetch_team_managers(league_id: int, year: int) -> dict[int, list[str]]:
     """
     Returns {teamId: [manager display names...]} by joining:
-      - mTeam.teams[].owners[]  -> owner IDs per team
-      - mMembers.members[]      -> owner ID -> displayName (or name fallback)
+      - mTeam.teams[].owners[] or .primaryOwner -> owner IDs per team
+      - mMembers.members[] -> owner ID -> displayName (or name/email/ID fallback)
     """
-    base = f"https://fantasy.espn.com/apis/v3/games/ffl/seasons/{year}/segments/0/leagues/{league_id}"
-
-    # 1) Pull owners per team
+    # 1) Pull owners per team (wrapper-first, then HTTP)
+    raw_team = _fetch_view_with_wrapper_then_http("mTeam", year)
     owners_map: dict[int, list[str]] = {}
-    raw_team = GET(base, params={"view": "mTeam"})
+
     for t in (raw_team.get("teams") or []):
         tid = t.get("id")
-        owners_map[tid] = t.get("owners", []) or []
+        owners = t.get("owners", []) or []
+        # Some leagues only expose a single 'primaryOwner'
+        primary = t.get("primaryOwner")
+        if primary and primary not in owners:
+            owners.append(primary)
+        owners_map[tid] = owners
 
     # 2) Pull member directory (owner ID -> display name)
+    raw_members = _fetch_view_with_wrapper_then_http("mMembers", year)
     members_map: dict[str, str] = {}
-    raw_members = GET(base, params={"view": "mMembers"})
     for m in (raw_members.get("members") or []):
         oid = m.get("id")
-        # best-effort human name
         display = (
             m.get("displayName")
-            or (" ".join([x for x in [m.get("firstName"), m.get("lastName")] if x]))  # "First Last"
+            or " ".join([x for x in [m.get("firstName"), m.get("lastName")] if x])
             or m.get("nickname")
             or m.get("email")
             or oid
@@ -140,13 +160,12 @@ def fetch_team_managers(league_id: int, year: int) -> dict[int, list[str]]:
         if oid:
             members_map[oid] = display
 
-    # 3) Resolve owners -> display names per team
+    # 3) Resolve owners -> display names per team (fallback to raw IDs if needed)
     managers_by_team: dict[int, list[str]] = {}
     for tid, owner_ids in owners_map.items():
         managers_by_team[tid] = [members_map.get(oid, oid) for oid in owner_ids]
 
     return managers_by_team
-
 
 
 # ================================
