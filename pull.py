@@ -107,6 +107,49 @@ def GET(url, params=None, timeout=20, retries=3, backoff=0.6):
     return {}
 
 # ================================
+# Team managers (owner display names)
+# ================================
+def fetch_team_managers(league_id: int, year: int) -> dict[int, list[str]]:
+    """
+    Returns {teamId: [manager display names...]} by joining:
+      - mTeam.teams[].owners[]  -> owner IDs per team
+      - mMembers.members[]      -> owner ID -> displayName (or name fallback)
+    """
+    base = f"https://fantasy.espn.com/apis/v3/games/ffl/seasons/{year}/segments/0/leagues/{league_id}"
+
+    # 1) Pull owners per team
+    owners_map: dict[int, list[str]] = {}
+    raw_team = GET(base, params={"view": "mTeam"})
+    for t in (raw_team.get("teams") or []):
+        tid = t.get("id")
+        owners_map[tid] = t.get("owners", []) or []
+
+    # 2) Pull member directory (owner ID -> display name)
+    members_map: dict[str, str] = {}
+    raw_members = GET(base, params={"view": "mMembers"})
+    for m in (raw_members.get("members") or []):
+        oid = m.get("id")
+        # best-effort human name
+        display = (
+            m.get("displayName")
+            or (" ".join([x for x in [m.get("firstName"), m.get("lastName")] if x]))  # "First Last"
+            or m.get("nickname")
+            or m.get("email")
+            or oid
+        )
+        if oid:
+            members_map[oid] = display
+
+    # 3) Resolve owners -> display names per team
+    managers_by_team: dict[int, list[str]] = {}
+    for tid, owner_ids in owners_map.items():
+        managers_by_team[tid] = [members_map.get(oid, oid) for oid in owner_ids]
+
+    return managers_by_team
+
+
+
+# ================================
 # ---- Current season basics ----
 # ================================
 # League size & teams
@@ -127,6 +170,17 @@ for t in league.teams:
         "points_for": float(getattr(t, "points_for", 0.0) or 0.0),
         "points_against": float(getattr(t, "points_against", 0.0) or 0.0),
     })
+
+# Attach manager display names to each team
+try:
+    managers_by_team = fetch_team_managers(LEAGUE_ID, YEAR)
+except Exception:
+    managers_by_team = {}
+
+for team in teams_current:
+    tid = team["team_id"]
+    team["managers"] = managers_by_team.get(tid, [])
+
 
 # ================================
 # ---- Final results (history) ----
