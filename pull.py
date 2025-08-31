@@ -131,45 +131,66 @@ for t in league.teams:
 # ================================
 # ---- Final results (history) ----
 # ================================
-# We fetch the last N seasons (HISTORY_YEARS), one call per season for clarity.
-# leagueHistory returns either a list (usually length 1) or a dict, depending on ESPN.
 history = []
 start_year = YEAR - 1
-end_year = max(YEAR - HISTORY_YEARS, YEAR - 10)  # hard stop so you don't hammer too many years by accident
+end_year = max(YEAR - HISTORY_YEARS, YEAR - 10)  # safety cap
 
-for season in range(start_year, end_year, -1):
-    payload = GET(BASE_HISTORY, params={"seasonId": season, "view": "mStandings"})
-    if isinstance(payload, list) and payload:
-        data = payload[0]
-    elif isinstance(payload, dict) and payload:
-        data = payload
-    else:
-        # Could be private or nonexistent season; skip quietly
-        continue
+def _history_from_wrapper(season):
+    """Try using espn_api.League for the past season (most reliable)."""
+    try:
+        past = League(league_id=LEAGUE_ID, year=season, espn_s2=ESPN_S2, swid=SWID)
+    except Exception:
+        return None
+    teams_hist = []
+    # espn_api exposes team name & season totals; final rank may not always be available
+    for t in past.teams:
+        teams_hist.append({
+            "teamId": t.team_id,
+            "name": t.team_name,
+            "wins": int(getattr(t, "wins", 0) or 0),
+            "losses": int(getattr(t, "losses", 0) or 0),
+            "ties": int(getattr(t, "ties", 0) or 0),
+            "pointsFor": float(getattr(t, "points_for", 0.0) or 0.0),
+            "pointsAgainst": float(getattr(t, "points_against", 0.0) or 0.0),
+            # espn_api sometimes has final_standing; if not, we’ll leave it None
+            "rankFinal": getattr(t, "final_standing", None),
+        })
+    return {"season": season, "teams": teams_hist}
 
+def _history_from_http(season):
+    """Fallback to leagueHistory endpoint if wrapper fails."""
+    payload = GET(
+        f"https://fantasy.espn.com/apis/v3/games/ffl/leagueHistory/{LEAGUE_ID}",
+        params={"seasonId": season, "view": "mStandings"}
+    )
+    data = payload[0] if isinstance(payload, list) and payload else (payload if isinstance(payload, dict) else None)
+    if not data:
+        return None
     teams_hist = []
     for t in (data.get("teams") or []):
-        # ESPN splits name into location/nickname in this view
-        location = t.get("location") or ""
-        nickname = t.get("nickname") or ""
-        display_name = (location + " " + nickname).strip() or nickname or location or f"Team {t.get('id')}"
+        loc = t.get("location") or ""
+        nick = t.get("nickname") or ""
+        name = (loc + " " + nick).strip() or nick or loc or f"Team {t.get('id')}"
         rec = ((t.get("record") or {}).get("overall") or {})
         teams_hist.append({
             "teamId": t.get("id"),
-            "name": display_name,
+            "name": name,
             "wins": rec.get("wins", 0),
             "losses": rec.get("losses", 0),
             "ties": rec.get("ties", 0),
             "pointsFor": t.get("pointsFor", 0.0),
             "pointsAgainst": t.get("pointsAgainst", 0.0),
-            # rankCalculatedFinal is the usual final rank; fallback to playoffSeed
             "rankFinal": t.get("rankCalculatedFinal") if t.get("rankCalculatedFinal") is not None else t.get("playoffSeed"),
         })
+    return {"season": season, "teams": teams_hist}
 
-    history.append({
-        "season": season,
-        "teams": teams_hist,
-    })
+for season in range(start_year, end_year, -1):  # e.g., 2024, 2023, ...
+    row = _history_from_wrapper(season)
+    if row is None:
+        row = _history_from_http(season)
+    if row:
+        history.append(row)
+
 
 # ================================
 # ---- Final JSON bundle ----
