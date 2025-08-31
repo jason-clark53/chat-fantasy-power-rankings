@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at_utc": "2025-08-31T13:38:01Z",
+    "generated_at_utc": "2025-08-31T14:17:25Z",
     "source": "espn_api + leagueHistory"
   },
   "league": {
@@ -19,7 +19,8 @@
         "ties": 0
       },
       "points_for": 0.0,
-      "points_against": 0.0
+      "points_against": 0.0,
+      "managers": []
     },
     {
       "team_id": 2,
@@ -30,7 +31,8 @@
         "ties": 0
       },
       "points_for": 0.0,
-      "points_against": 0.0
+      "points_against": 0.0,
+      "managers": []
     },
     {
       "team_id": 3,
@@ -41,7 +43,8 @@
         "ties": 0
       },
       "points_for": 0.0,
-      "points_against": 0.0
+      "points_against": 0.0,
+      "managers": []
     },
     {
       "team_id": 4,
@@ -52,7 +55,8 @@
         "ties": 0
       },
       "points_for": 0.0,
-      "points_against": 0.0
+      "points_against": 0.0,
+      "managers": []
     },
     {
       "team_id": 5,
@@ -63,7 +67,8 @@
         "ties": 0
       },
       "points_for": 0.0,
-      "points_against": 0.0
+      "points_against": 0.0,
+      "managers": []
     },
     {
       "team_id": 6,
@@ -74,7 +79,8 @@
         "ties": 0
       },
       "points_for": 0.0,
-      "points_against": 0.0
+      "points_against": 0.0,
+      "managers": []
     },
     {
       "team_id": 7,
@@ -85,7 +91,8 @@
         "ties": 0
       },
       "points_for": 0.0,
-      "points_against": 0.0
+      "points_against": 0.0,
+      "managers": []
     },
     {
       "team_id": 8,
@@ -96,7 +103,8 @@
         "ties": 0
       },
       "points_for": 0.0,
-      "points_against": 0.0
+      "points_against": 0.0,
+      "managers": []
     },
     {
       "team_id": 9,
@@ -107,7 +115,8 @@
         "ties": 0
       },
       "points_for": 0.0,
-      "points_against": 0.0
+      "points_against": 0.0,
+      "managers": []
     },
     {
       "team_id": 10,
@@ -118,7 +127,8 @@
         "ties": 0
       },
       "points_for": 0.0,
-      "points_against": 0.0
+      "points_against": 0.0,
+      "managers": []
     },
     {
       "team_id": 11,
@@ -129,7 +139,8 @@
         "ties": 0
       },
       "points_for": 0.0,
-      "points_against": 0.0
+      "points_against": 0.0,
+      "managers": []
     },
     {
       "team_id": 12,
@@ -140,7 +151,8 @@
         "ties": 0
       },
       "points_for": 0.0,
-      "points_against": 0.0
+      "points_against": 0.0,
+      "managers": []
     },
     {
       "team_id": 13,
@@ -151,7 +163,8 @@
         "ties": 0
       },
       "points_for": 0.0,
-      "points_against": 0.0
+      "points_against": 0.0,
+      "managers": []
     },
     {
       "team_id": 14,
@@ -162,7 +175,8 @@
         "ties": 0
       },
       "points_for": 0.0,
-      "points_against": 0.0
+      "points_against": 0.0,
+      "managers": []
     }
   ],
   "history": [
