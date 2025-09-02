@@ -265,91 +265,12 @@ history = []
 start_year = YEAR - 1
 end_year = max(YEAR - HISTORY_YEARS, YEAR - 10)  # safety cap
 
-# Helper to add managers to results from previous years
-# Paster in front of the sections
-def _format_member_name(m: dict) -> str:
-    """Prefer 'First Last'; otherwise fall back to displayName/nickname/email/id."""
-    first = (m.get("firstName") or "").strip()
-    last  = (m.get("lastName")  or "").strip()
-    if first or last:
-        return f"{first} {last}".strip()
-    return (m.get("displayName") or m.get("nickname") or m.get("email") or m.get("id") or "").strip()
-
-def _members_name_map_for_season(league_id: int, season: int) -> dict[str, str]:
-    """
-    Returns {ownerId: 'First Last'} for the given season using view=mMembers.
-    Falls back to the *current* season if the past season is empty.
-    """
-    base = f"https://fantasy.espn.com/apis/v3/games/ffl/seasons/{season}/segments/0/leagues/{league_id}"
-    data = GET(base, params={"view": "mMembers"})
-    members = data.get("members") or []
-    # fallback: some leagues don’t return mMembers for old seasons; try current season
-    if not members and season != YEAR:
-        base_now = f"https://fantasy.espn.com/apis/v3/games/ffl/seasons/{YEAR}/segments/0/leagues/{league_id}"
-        data_now = GET(base_now, params={"view": "mMembers"})
-        members = data_now.get("members") or []
-    return {m.get("id"): _format_member_name(m) for m in members if m.get("id")}
-
-def _owners_by_team_from_history(league_id: int, season: int) -> dict[int, list[str]]:
-    """
-    For a past season, build {teamId: [ownerIds...]}.
-    First try leagueHistory (teams[].owners / primaryOwner).
-    If missing, fall back to the season’s mTeam view.
-    """
-    owners_map: dict[int, list[str]] = {}
-
-    # A) leagueHistory (mStandings) often includes owners/primaryOwner
-    payload = GET(f"https://fantasy.espn.com/apis/v3/games/ffl/leagueHistory/{league_id}",
-                  params={"seasonId": season, "view": "mStandings"})
-    data = payload[0] if isinstance(payload, list) and payload else (payload if isinstance(payload, dict) else None)
-    if isinstance(data, dict):
-        for t in data.get("teams", []) or []:
-            tid = t.get("id")
-            ids = list(t.get("owners", []) or [])
-            primary = t.get("primaryOwner")
-            if primary and primary not in ids:
-                ids.append(primary)
-            if tid is not None:
-                owners_map[tid] = ids
-
-    # B) fallback: season mTeam
-    if not owners_map:
-        base = f"https://fantasy.espn.com/apis/v3/games/ffl/seasons/{season}/segments/0/leagues/{league_id}"
-        raw_team = GET(base, params={"view": "mTeam"})
-        for t in (raw_team.get("teams") or []):
-            tid = t.get("id")
-            ids = list(t.get("owners", []) or [])
-            primary = t.get("primaryOwner")
-            if primary and primary not in ids:
-                ids.append(primary)
-            if tid is not None:
-                owners_map[tid] = ids
-
-    return owners_map
-
-def _manager_names_for_season(league_id: int, season: int) -> dict[int, list[str]]:
-    """
-    Combines the two maps above to produce {teamId: ['First Last', ...]} for a season.
-    """
-    members_map = _members_name_map_for_season(league_id, season)
-    owners_map  = _owners_by_team_from_history(league_id, season)
-    out: dict[int, list[str]] = {}
-    for tid, owner_ids in owners_map.items():
-        out[tid] = [members_map.get(oid, oid) for oid in (owner_ids or [])]
-    return out
-
-
-
 def _history_from_wrapper(season):
     """Try using espn_api.League for the past season (most reliable)."""
     try:
         past = League(league_id=LEAGUE_ID, year=season, espn_s2=ESPN_S2, swid=SWID)
     except Exception:
         return None
-
-    # NEW: resolve teamId -> manager names for this past season
-    mgr_map = _manager_names_for_season(LEAGUE_ID, season)  # <-- add thishis
-  
     teams_hist = []
     # espn_api exposes team name & season totals; final rank may not always be available
     for t in past.teams:
@@ -375,10 +296,6 @@ def _history_from_http(season):
     data = payload[0] if isinstance(payload, list) and payload else (payload if isinstance(payload, dict) else None)
     if not data:
         return None
-    
-    # NEW: resolve teamId -> manager names for this past season
-    mgr_map = _manager_names_for_season(LEAGUE_ID, season)  # <-- add this
-    
     teams_hist = []
     for t in (data.get("teams") or []):
         loc = t.get("location") or ""
