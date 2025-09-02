@@ -267,47 +267,77 @@ end_year = max(YEAR - HISTORY_YEARS, YEAR - 10)  # safety cap
 
 # Helper to add managers to results from previous years
 # Paster in front of the sections
-def fetch_team_managers_for_season(league_id: int, season: int) -> dict[int, list[str]]:
-    """
-    Pulls managers for a specific season using raw views (works for past years):
-      - mTeam.teams[].owners[] / primaryOwner -> owner IDs per team
-      - mMembers.members[] -> id -> firstName/lastName/displayName
+def _format_member_name(m: dict) -> str:
+    """Prefer 'First Last'; otherwise fall back to displayName/nickname/email/id."""
+    first = (m.get("firstName") or "").strip()
+    last  = (m.get("lastName")  or "").strip()
+    if first or last:
+        return f"{first} {last}".strip()
+    return (m.get("displayName") or m.get("nickname") or m.get("email") or m.get("id") or "").strip()
 
-    Returns: {teamId: ["First Last", ...]}
+def _members_name_map_for_season(league_id: int, season: int) -> dict[str, str]:
+    """
+    Returns {ownerId: 'First Last'} for the given season using view=mMembers.
+    Falls back to the *current* season if the past season is empty.
     """
     base = f"https://fantasy.espn.com/apis/v3/games/ffl/seasons/{season}/segments/0/leagues/{league_id}"
+    data = GET(base, params={"view": "mMembers"})
+    members = data.get("members") or []
+    # fallback: some leagues don’t return mMembers for old seasons; try current season
+    if not members and season != YEAR:
+        base_now = f"https://fantasy.espn.com/apis/v3/games/ffl/seasons/{YEAR}/segments/0/leagues/{league_id}"
+        data_now = GET(base_now, params={"view": "mMembers"})
+        members = data_now.get("members") or []
+    return {m.get("id"): _format_member_name(m) for m in members if m.get("id")}
 
-    # team -> owner ids
+def _owners_by_team_from_history(league_id: int, season: int) -> dict[int, list[str]]:
+    """
+    For a past season, build {teamId: [ownerIds...]}.
+    First try leagueHistory (teams[].owners / primaryOwner).
+    If missing, fall back to the season’s mTeam view.
+    """
     owners_map: dict[int, list[str]] = {}
-    raw_team = GET(base, params={"view": "mTeam"})
-    for t in (raw_team.get("teams") or []):
-        tid = t.get("id")
-        ids = list(t.get("owners", []) or [])
-        primary = t.get("primaryOwner")
-        if primary and primary not in ids:
-            ids.append(primary)
-        owners_map[tid] = ids
 
-    # owner id -> best human name ("First Last" if available)
-    members_map: dict[str, str] = {}
-    raw_members = GET(base, params={"view": "mMembers"})
-    for m in (raw_members.get("members") or []):
-        oid = m.get("id")
-        first = (m.get("firstName") or "").strip()
-        last  = (m.get("lastName") or "").strip()
-        if first or last:
-            display = f"{first} {last}".strip()
-        else:
-            display = (m.get("displayName") or m.get("nickname") or m.get("email") or oid or "").strip()
-        if oid:
-            members_map[oid] = display
+    # A) leagueHistory (mStandings) often includes owners/primaryOwner
+    payload = GET(f"https://fantasy.espn.com/apis/v3/games/ffl/leagueHistory/{league_id}",
+                  params={"seasonId": season, "view": "mStandings"})
+    data = payload[0] if isinstance(payload, list) and payload else (payload if isinstance(payload, dict) else None)
+    if isinstance(data, dict):
+        for t in data.get("teams", []) or []:
+            tid = t.get("id")
+            ids = list(t.get("owners", []) or [])
+            primary = t.get("primaryOwner")
+            if primary and primary not in ids:
+                ids.append(primary)
+            if tid is not None:
+                owners_map[tid] = ids
 
-    # resolve to names
-    managers_by_team: dict[int, list[str]] = {}
+    # B) fallback: season mTeam
+    if not owners_map:
+        base = f"https://fantasy.espn.com/apis/v3/games/ffl/seasons/{season}/segments/0/leagues/{league_id}"
+        raw_team = GET(base, params={"view": "mTeam"})
+        for t in (raw_team.get("teams") or []):
+            tid = t.get("id")
+            ids = list(t.get("owners", []) or [])
+            primary = t.get("primaryOwner")
+            if primary and primary not in ids:
+                ids.append(primary)
+            if tid is not None:
+                owners_map[tid] = ids
+
+    return owners_map
+
+def _manager_names_for_season(league_id: int, season: int) -> dict[int, list[str]]:
+    """
+    Combines the two maps above to produce {teamId: ['First Last', ...]} for a season.
+    """
+    members_map = _members_name_map_for_season(league_id, season)
+    owners_map  = _owners_by_team_from_history(league_id, season)
+    out: dict[int, list[str]] = {}
     for tid, owner_ids in owners_map.items():
-        managers_by_team[tid] = [members_map.get(oid, oid) for oid in (owner_ids or [])]
+        out[tid] = [members_map.get(oid, oid) for oid in (owner_ids or [])]
+    return out
 
-    return managers_by_team
 
 
 def _history_from_wrapper(season):
@@ -317,8 +347,8 @@ def _history_from_wrapper(season):
     except Exception:
         return None
 
-    # NEW: managers for this season (from raw views; wrapper often lacks owner names)
-    managers_by_team = fetch_team_managers_for_season(LEAGUE_ID, season)  # <-- add this
+    # NEW: resolve teamId -> manager names for this past season
+    mgr_map = _manager_names_for_season(LEAGUE_ID, season)  # <-- add thishis
   
     teams_hist = []
     # espn_api exposes team name & season totals; final rank may not always be available
@@ -346,8 +376,8 @@ def _history_from_http(season):
     if not data:
         return None
     
-    # NEW: managers for this season from raw views
-    managers_by_team = fetch_team_managers_for_season(LEAGUE_ID, season)   # <-- add this
+    # NEW: resolve teamId -> manager names for this past season
+    mgr_map = _manager_names_for_season(LEAGUE_ID, season)  # <-- add this
     
     teams_hist = []
     for t in (data.get("teams") or []):
