@@ -194,7 +194,6 @@ def fetch_team_managers(league_id: int, year: int) -> dict[int, list[str]]:
     return managers_by_team
 
 
-
 # ================================
 # ---- Current season basics ----
 # ================================
@@ -226,6 +225,37 @@ except Exception:
 for team in teams_current:
     tid = team["team_id"]
     team["managers"] = managers_by_team.get(tid, [])
+
+# --- Keep only first + last name for managers (handles dicts or stringified dicts) ---
+import ast
+
+def _to_full_name(x):
+    # dict from mMembers
+    if isinstance(x, dict):
+        first = (x.get("firstName") or "").strip()
+        last  = (x.get("lastName")  or "").strip()
+        name = f"{first} {last}".strip()
+        if name:
+            return name
+        # fallback if first/last missing
+        return (x.get("displayName") or x.get("nickname") or "").strip()
+
+    # string that looks like a dict -> parse safely
+    if isinstance(x, str):
+        try:
+            d = ast.literal_eval(x)  # handles single quotes/True/False/None
+            if isinstance(d, dict):
+                return _to_full_name(d)
+        except Exception:
+            pass
+        return x.strip()  # last resort: leave as-is
+
+    # anything else -> string
+    return str(x).strip()
+
+for team in teams_current:
+    raw_mgrs = team.get("managers", [])
+    team["managers"] = [n for n in (_to_full_name(m) for m in raw_mgrs) if n]
 
 
 # ================================
