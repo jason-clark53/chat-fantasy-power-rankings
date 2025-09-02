@@ -265,12 +265,61 @@ history = []
 start_year = YEAR - 1
 end_year = max(YEAR - HISTORY_YEARS, YEAR - 10)  # safety cap
 
+# Helper to add managers to results from previous years
+# Paster in front of the sections
+def fetch_team_managers_for_season(league_id: int, season: int) -> dict[int, list[str]]:
+    """
+    Pulls managers for a specific season using raw views (works for past years):
+      - mTeam.teams[].owners[] / primaryOwner -> owner IDs per team
+      - mMembers.members[] -> id -> firstName/lastName/displayName
+
+    Returns: {teamId: ["First Last", ...]}
+    """
+    base = f"https://fantasy.espn.com/apis/v3/games/ffl/seasons/{season}/segments/0/leagues/{league_id}"
+
+    # team -> owner ids
+    owners_map: dict[int, list[str]] = {}
+    raw_team = GET(base, params={"view": "mTeam"})
+    for t in (raw_team.get("teams") or []):
+        tid = t.get("id")
+        ids = list(t.get("owners", []) or [])
+        primary = t.get("primaryOwner")
+        if primary and primary not in ids:
+            ids.append(primary)
+        owners_map[tid] = ids
+
+    # owner id -> best human name ("First Last" if available)
+    members_map: dict[str, str] = {}
+    raw_members = GET(base, params={"view": "mMembers"})
+    for m in (raw_members.get("members") or []):
+        oid = m.get("id")
+        first = (m.get("firstName") or "").strip()
+        last  = (m.get("lastName") or "").strip()
+        if first or last:
+            display = f"{first} {last}".strip()
+        else:
+            display = (m.get("displayName") or m.get("nickname") or m.get("email") or oid or "").strip()
+        if oid:
+            members_map[oid] = display
+
+    # resolve to names
+    managers_by_team: dict[int, list[str]] = {}
+    for tid, owner_ids in owners_map.items():
+        managers_by_team[tid] = [members_map.get(oid, oid) for oid in (owner_ids or [])]
+
+    return managers_by_team
+
+
 def _history_from_wrapper(season):
     """Try using espn_api.League for the past season (most reliable)."""
     try:
         past = League(league_id=LEAGUE_ID, year=season, espn_s2=ESPN_S2, swid=SWID)
     except Exception:
         return None
+
+    # NEW: managers for this season (from raw views; wrapper often lacks owner names)
+    managers_by_team = fetch_team_managers_for_season(LEAGUE_ID, season)  # <-- add this
+  
     teams_hist = []
     # espn_api exposes team name & season totals; final rank may not always be available
     for t in past.teams:
@@ -296,6 +345,10 @@ def _history_from_http(season):
     data = payload[0] if isinstance(payload, list) and payload else (payload if isinstance(payload, dict) else None)
     if not data:
         return None
+    
+    # NEW: managers for this season from raw views
+    managers_by_team = fetch_team_managers_for_season(LEAGUE_ID, season)   # <-- add this
+    
     teams_hist = []
     for t in (data.get("teams") or []):
         loc = t.get("location") or ""
