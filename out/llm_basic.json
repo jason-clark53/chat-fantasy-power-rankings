@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at_utc": "2025-09-03T11:24:29Z",
+    "generated_at_utc": "2025-09-03T11:32:40Z",
     "source": "espn_api + leagueHistory"
   },
   "league": {
@@ -209,7 +209,1368 @@
       ]
     }
   ],
-  "schedule_weeks": [],
+  "regular_season_schedule": [
+    {
+      "week": 1,
+      "matchups": [
+        {
+          "home": {
+            "team_id": 1,
+            "name": "America's Team"
+          },
+          "away": {
+            "team_id": 2,
+            "name": "Koo Koo's Nest"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 12,
+            "name": "HallOfBass"
+          },
+          "away": {
+            "team_id": 4,
+            "name": "Home Team"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 8,
+            "name": "Ragnar the Spoiled"
+          },
+          "away": {
+            "team_id": 9,
+            "name": "Anzalone Hair Jealousy"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 14,
+            "name": "Thirst Down and Inches"
+          },
+          "away": {
+            "team_id": 7,
+            "name": "Go Go Gators"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 6,
+            "name": "Team Hairy"
+          },
+          "away": {
+            "team_id": 13,
+            "name": "Team Kolb"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 10,
+            "name": "The Separatists Rise Again"
+          },
+          "away": {
+            "team_id": 5,
+            "name": "For McCaffrey"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 11,
+            "name": "Nothing runs like a Deere"
+          },
+          "away": {
+            "team_id": 3,
+            "name": "J-man\u2019s team"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        }
+      ]
+    },
+    {
+      "week": 2,
+      "matchups": [
+        {
+          "home": {
+            "team_id": 2,
+            "name": "Koo Koo's Nest"
+          },
+          "away": {
+            "team_id": 4,
+            "name": "Home Team"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 9,
+            "name": "Anzalone Hair Jealousy"
+          },
+          "away": {
+            "team_id": 1,
+            "name": "America's Team"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 7,
+            "name": "Go Go Gators"
+          },
+          "away": {
+            "team_id": 12,
+            "name": "HallOfBass"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 13,
+            "name": "Team Kolb"
+          },
+          "away": {
+            "team_id": 8,
+            "name": "Ragnar the Spoiled"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 5,
+            "name": "For McCaffrey"
+          },
+          "away": {
+            "team_id": 14,
+            "name": "Thirst Down and Inches"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 3,
+            "name": "J-man\u2019s team"
+          },
+          "away": {
+            "team_id": 6,
+            "name": "Team Hairy"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 11,
+            "name": "Nothing runs like a Deere"
+          },
+          "away": {
+            "team_id": 10,
+            "name": "The Separatists Rise Again"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        }
+      ]
+    },
+    {
+      "week": 3,
+      "matchups": [
+        {
+          "home": {
+            "team_id": 9,
+            "name": "Anzalone Hair Jealousy"
+          },
+          "away": {
+            "team_id": 2,
+            "name": "Koo Koo's Nest"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 4,
+            "name": "Home Team"
+          },
+          "away": {
+            "team_id": 7,
+            "name": "Go Go Gators"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 1,
+            "name": "America's Team"
+          },
+          "away": {
+            "team_id": 13,
+            "name": "Team Kolb"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 12,
+            "name": "HallOfBass"
+          },
+          "away": {
+            "team_id": 5,
+            "name": "For McCaffrey"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 8,
+            "name": "Ragnar the Spoiled"
+          },
+          "away": {
+            "team_id": 3,
+            "name": "J-man\u2019s team"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 14,
+            "name": "Thirst Down and Inches"
+          },
+          "away": {
+            "team_id": 11,
+            "name": "Nothing runs like a Deere"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 6,
+            "name": "Team Hairy"
+          },
+          "away": {
+            "team_id": 10,
+            "name": "The Separatists Rise Again"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        }
+      ]
+    },
+    {
+      "week": 4,
+      "matchups": [
+        {
+          "home": {
+            "team_id": 2,
+            "name": "Koo Koo's Nest"
+          },
+          "away": {
+            "team_id": 7,
+            "name": "Go Go Gators"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 13,
+            "name": "Team Kolb"
+          },
+          "away": {
+            "team_id": 9,
+            "name": "Anzalone Hair Jealousy"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 5,
+            "name": "For McCaffrey"
+          },
+          "away": {
+            "team_id": 4,
+            "name": "Home Team"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 3,
+            "name": "J-man\u2019s team"
+          },
+          "away": {
+            "team_id": 1,
+            "name": "America's Team"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 11,
+            "name": "Nothing runs like a Deere"
+          },
+          "away": {
+            "team_id": 12,
+            "name": "HallOfBass"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 10,
+            "name": "The Separatists Rise Again"
+          },
+          "away": {
+            "team_id": 8,
+            "name": "Ragnar the Spoiled"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 6,
+            "name": "Team Hairy"
+          },
+          "away": {
+            "team_id": 14,
+            "name": "Thirst Down and Inches"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        }
+      ]
+    },
+    {
+      "week": 5,
+      "matchups": [
+        {
+          "home": {
+            "team_id": 13,
+            "name": "Team Kolb"
+          },
+          "away": {
+            "team_id": 2,
+            "name": "Koo Koo's Nest"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 7,
+            "name": "Go Go Gators"
+          },
+          "away": {
+            "team_id": 5,
+            "name": "For McCaffrey"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 9,
+            "name": "Anzalone Hair Jealousy"
+          },
+          "away": {
+            "team_id": 3,
+            "name": "J-man\u2019s team"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 4,
+            "name": "Home Team"
+          },
+          "away": {
+            "team_id": 11,
+            "name": "Nothing runs like a Deere"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 1,
+            "name": "America's Team"
+          },
+          "away": {
+            "team_id": 10,
+            "name": "The Separatists Rise Again"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 12,
+            "name": "HallOfBass"
+          },
+          "away": {
+            "team_id": 6,
+            "name": "Team Hairy"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 8,
+            "name": "Ragnar the Spoiled"
+          },
+          "away": {
+            "team_id": 14,
+            "name": "Thirst Down and Inches"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        }
+      ]
+    },
+    {
+      "week": 6,
+      "matchups": [
+        {
+          "home": {
+            "team_id": 2,
+            "name": "Koo Koo's Nest"
+          },
+          "away": {
+            "team_id": 5,
+            "name": "For McCaffrey"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 3,
+            "name": "J-man\u2019s team"
+          },
+          "away": {
+            "team_id": 13,
+            "name": "Team Kolb"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 11,
+            "name": "Nothing runs like a Deere"
+          },
+          "away": {
+            "team_id": 7,
+            "name": "Go Go Gators"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 10,
+            "name": "The Separatists Rise Again"
+          },
+          "away": {
+            "team_id": 9,
+            "name": "Anzalone Hair Jealousy"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 6,
+            "name": "Team Hairy"
+          },
+          "away": {
+            "team_id": 4,
+            "name": "Home Team"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 14,
+            "name": "Thirst Down and Inches"
+          },
+          "away": {
+            "team_id": 1,
+            "name": "America's Team"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 8,
+            "name": "Ragnar the Spoiled"
+          },
+          "away": {
+            "team_id": 12,
+            "name": "HallOfBass"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        }
+      ]
+    },
+    {
+      "week": 7,
+      "matchups": [
+        {
+          "home": {
+            "team_id": 3,
+            "name": "J-man\u2019s team"
+          },
+          "away": {
+            "team_id": 2,
+            "name": "Koo Koo's Nest"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 5,
+            "name": "For McCaffrey"
+          },
+          "away": {
+            "team_id": 11,
+            "name": "Nothing runs like a Deere"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 13,
+            "name": "Team Kolb"
+          },
+          "away": {
+            "team_id": 10,
+            "name": "The Separatists Rise Again"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 7,
+            "name": "Go Go Gators"
+          },
+          "away": {
+            "team_id": 6,
+            "name": "Team Hairy"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 9,
+            "name": "Anzalone Hair Jealousy"
+          },
+          "away": {
+            "team_id": 14,
+            "name": "Thirst Down and Inches"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 4,
+            "name": "Home Team"
+          },
+          "away": {
+            "team_id": 8,
+            "name": "Ragnar the Spoiled"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 1,
+            "name": "America's Team"
+          },
+          "away": {
+            "team_id": 12,
+            "name": "HallOfBass"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        }
+      ]
+    },
+    {
+      "week": 8,
+      "matchups": [
+        {
+          "home": {
+            "team_id": 2,
+            "name": "Koo Koo's Nest"
+          },
+          "away": {
+            "team_id": 11,
+            "name": "Nothing runs like a Deere"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 10,
+            "name": "The Separatists Rise Again"
+          },
+          "away": {
+            "team_id": 3,
+            "name": "J-man\u2019s team"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 6,
+            "name": "Team Hairy"
+          },
+          "away": {
+            "team_id": 5,
+            "name": "For McCaffrey"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 14,
+            "name": "Thirst Down and Inches"
+          },
+          "away": {
+            "team_id": 13,
+            "name": "Team Kolb"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 8,
+            "name": "Ragnar the Spoiled"
+          },
+          "away": {
+            "team_id": 7,
+            "name": "Go Go Gators"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 12,
+            "name": "HallOfBass"
+          },
+          "away": {
+            "team_id": 9,
+            "name": "Anzalone Hair Jealousy"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 1,
+            "name": "America's Team"
+          },
+          "away": {
+            "team_id": 4,
+            "name": "Home Team"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        }
+      ]
+    },
+    {
+      "week": 9,
+      "matchups": [
+        {
+          "home": {
+            "team_id": 10,
+            "name": "The Separatists Rise Again"
+          },
+          "away": {
+            "team_id": 2,
+            "name": "Koo Koo's Nest"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 11,
+            "name": "Nothing runs like a Deere"
+          },
+          "away": {
+            "team_id": 6,
+            "name": "Team Hairy"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 3,
+            "name": "J-man\u2019s team"
+          },
+          "away": {
+            "team_id": 14,
+            "name": "Thirst Down and Inches"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 5,
+            "name": "For McCaffrey"
+          },
+          "away": {
+            "team_id": 8,
+            "name": "Ragnar the Spoiled"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 13,
+            "name": "Team Kolb"
+          },
+          "away": {
+            "team_id": 12,
+            "name": "HallOfBass"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 7,
+            "name": "Go Go Gators"
+          },
+          "away": {
+            "team_id": 1,
+            "name": "America's Team"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 9,
+            "name": "Anzalone Hair Jealousy"
+          },
+          "away": {
+            "team_id": 4,
+            "name": "Home Team"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        }
+      ]
+    },
+    {
+      "week": 10,
+      "matchups": [
+        {
+          "home": {
+            "team_id": 2,
+            "name": "Koo Koo's Nest"
+          },
+          "away": {
+            "team_id": 6,
+            "name": "Team Hairy"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 14,
+            "name": "Thirst Down and Inches"
+          },
+          "away": {
+            "team_id": 10,
+            "name": "The Separatists Rise Again"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 8,
+            "name": "Ragnar the Spoiled"
+          },
+          "away": {
+            "team_id": 11,
+            "name": "Nothing runs like a Deere"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 12,
+            "name": "HallOfBass"
+          },
+          "away": {
+            "team_id": 3,
+            "name": "J-man\u2019s team"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 1,
+            "name": "America's Team"
+          },
+          "away": {
+            "team_id": 5,
+            "name": "For McCaffrey"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 4,
+            "name": "Home Team"
+          },
+          "away": {
+            "team_id": 13,
+            "name": "Team Kolb"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 9,
+            "name": "Anzalone Hair Jealousy"
+          },
+          "away": {
+            "team_id": 7,
+            "name": "Go Go Gators"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        }
+      ]
+    },
+    {
+      "week": 11,
+      "matchups": [
+        {
+          "home": {
+            "team_id": 14,
+            "name": "Thirst Down and Inches"
+          },
+          "away": {
+            "team_id": 2,
+            "name": "Koo Koo's Nest"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 6,
+            "name": "Team Hairy"
+          },
+          "away": {
+            "team_id": 8,
+            "name": "Ragnar the Spoiled"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 10,
+            "name": "The Separatists Rise Again"
+          },
+          "away": {
+            "team_id": 12,
+            "name": "HallOfBass"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 11,
+            "name": "Nothing runs like a Deere"
+          },
+          "away": {
+            "team_id": 1,
+            "name": "America's Team"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 3,
+            "name": "J-man\u2019s team"
+          },
+          "away": {
+            "team_id": 4,
+            "name": "Home Team"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 5,
+            "name": "For McCaffrey"
+          },
+          "away": {
+            "team_id": 9,
+            "name": "Anzalone Hair Jealousy"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 13,
+            "name": "Team Kolb"
+          },
+          "away": {
+            "team_id": 7,
+            "name": "Go Go Gators"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        }
+      ]
+    },
+    {
+      "week": 12,
+      "matchups": [
+        {
+          "home": {
+            "team_id": 2,
+            "name": "Koo Koo's Nest"
+          },
+          "away": {
+            "team_id": 8,
+            "name": "Ragnar the Spoiled"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 12,
+            "name": "HallOfBass"
+          },
+          "away": {
+            "team_id": 14,
+            "name": "Thirst Down and Inches"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 1,
+            "name": "America's Team"
+          },
+          "away": {
+            "team_id": 6,
+            "name": "Team Hairy"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 4,
+            "name": "Home Team"
+          },
+          "away": {
+            "team_id": 10,
+            "name": "The Separatists Rise Again"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 9,
+            "name": "Anzalone Hair Jealousy"
+          },
+          "away": {
+            "team_id": 11,
+            "name": "Nothing runs like a Deere"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 7,
+            "name": "Go Go Gators"
+          },
+          "away": {
+            "team_id": 3,
+            "name": "J-man\u2019s team"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 13,
+            "name": "Team Kolb"
+          },
+          "away": {
+            "team_id": 5,
+            "name": "For McCaffrey"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        }
+      ]
+    },
+    {
+      "week": 13,
+      "matchups": [
+        {
+          "home": {
+            "team_id": 12,
+            "name": "HallOfBass"
+          },
+          "away": {
+            "team_id": 2,
+            "name": "Koo Koo's Nest"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 8,
+            "name": "Ragnar the Spoiled"
+          },
+          "away": {
+            "team_id": 1,
+            "name": "America's Team"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 14,
+            "name": "Thirst Down and Inches"
+          },
+          "away": {
+            "team_id": 4,
+            "name": "Home Team"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 6,
+            "name": "Team Hairy"
+          },
+          "away": {
+            "team_id": 9,
+            "name": "Anzalone Hair Jealousy"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 10,
+            "name": "The Separatists Rise Again"
+          },
+          "away": {
+            "team_id": 7,
+            "name": "Go Go Gators"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 11,
+            "name": "Nothing runs like a Deere"
+          },
+          "away": {
+            "team_id": 13,
+            "name": "Team Kolb"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 3,
+            "name": "J-man\u2019s team"
+          },
+          "away": {
+            "team_id": 5,
+            "name": "For McCaffrey"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        }
+      ]
+    },
+    {
+      "week": 14,
+      "matchups": [
+        {
+          "home": {
+            "team_id": 2,
+            "name": "Koo Koo's Nest"
+          },
+          "away": {
+            "team_id": 1,
+            "name": "America's Team"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 4,
+            "name": "Home Team"
+          },
+          "away": {
+            "team_id": 12,
+            "name": "HallOfBass"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 9,
+            "name": "Anzalone Hair Jealousy"
+          },
+          "away": {
+            "team_id": 8,
+            "name": "Ragnar the Spoiled"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 7,
+            "name": "Go Go Gators"
+          },
+          "away": {
+            "team_id": 14,
+            "name": "Thirst Down and Inches"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 13,
+            "name": "Team Kolb"
+          },
+          "away": {
+            "team_id": 6,
+            "name": "Team Hairy"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 5,
+            "name": "For McCaffrey"
+          },
+          "away": {
+            "team_id": 10,
+            "name": "The Separatists Rise Again"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        },
+        {
+          "home": {
+            "team_id": 3,
+            "name": "J-man\u2019s team"
+          },
+          "away": {
+            "team_id": 11,
+            "name": "Nothing runs like a Deere"
+          },
+          "winner": "UNDECIDED",
+          "home_points": 0.0,
+          "away_points": 0.0
+        }
+      ]
+    },
+    {
+      "week": 15,
+      "matchups": []
+    },
+    {
+      "week": 16,
+      "matchups": []
+    },
+    {
+      "week": 17,
+      "matchups": []
+    },
+    {
+      "week": 18,
+      "matchups": []
+    }
+  ],
   "upcoming_matchups": [
     {
       "week": 1,
