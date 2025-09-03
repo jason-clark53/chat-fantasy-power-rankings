@@ -323,6 +323,121 @@ for season in range(start_year, end_year, -1):  # e.g., 2024, 2023, ...
 
 
 # ================================
+# ---- Upcoming week: matchups, lineups, projections ----
+# ================================
+# We try 3 ways to pick the target week:
+#   1) espn_api's league.current_week
+#   2) mSettings.status.currentMatchupPeriod
+#   3) fallback: last_completed_week + 1 (quick scan)
+def _guess_next_week():
+    # 1) wrapper
+    wk = None
+    try:
+        wk = getattr(league, "current_week", None)
+    except Exception:
+        wk = None
+    if isinstance(wk, int) and wk > 0:
+        return wk
+
+    # 2) status view (mSettings)
+    try:
+        base = f"https://fantasy.espn.com/apis/v3/games/ffl/seasons/{YEAR}/segments/0/leagues/{LEAGUE_ID}"
+        raw = GET(base, params={"view": "mSettings"}) or {}
+        status = raw.get("status") or {}
+        # Some seasons use "currentMatchupPeriod", others "currentMatchupPeriodId"
+        wk = status.get("currentMatchupPeriod") or status.get("currentMatchupPeriodId")
+        if isinstance(wk, int) and wk > 0:
+            return wk
+    except Exception:
+        pass
+
+    # 3) fallback: scan scoreboards for last decided wk and add 1
+    def _last_completed_week(max_periods=18):
+        last_done = 0
+        for w in range(1, max_periods + 1):
+            try:
+                games = league.scoreboard(week=w)
+            except Exception:
+                continue
+            if games and any(getattr(g, "winner", None) is not None for g in games):
+                last_done = w
+        return last_done
+
+    last_done = _last_completed_week()
+    return max(1, last_done + 1)
+
+# Which lineup slots count as "starters" for the team total?
+# We exclude classic bench/IR only.
+_NON_START_SLOTS = {"Bench", "IR", "BE", "BN"}  # espn_api returns "Bench" / "IR"; keep aliases just in case
+
+def _player_row_for_lineup(p):
+    """Normalize one lineup entry from BoxScore.home_lineup / away_lineup."""
+    name = getattr(p, "name", None)
+    pos  = getattr(p, "position", None)         # RB/WR/TE/QB/K/D/ST etc
+    slot = getattr(p, "slot_position", None)    # FLEX/RB/WR/Bench/IR/etc
+    proj = getattr(p, "projected_points", None)
+    try:
+        proj = float(proj) if proj is not None else None
+    except Exception:
+        proj = None
+    return {
+        "name": name,
+        "position": pos,
+        "lineup_slot": slot,
+        "projected_points": proj,
+    }
+
+def _team_projected_total(players):
+    """Sum projections for non-bench/IR players only."""
+    total = 0.0
+    for pl in players:
+        if not pl:
+            continue
+        slot = (pl.get("lineup_slot") or "").upper()
+        # normalize slot text for comparison (Bench/IR/etc.)
+        is_bench = any(b.upper() == slot for b in _NON_START_SLOTS)
+        if is_bench:
+            continue
+        pts = pl.get("projected_points")
+        if isinstance(pts, (int, float)):
+            total += pts
+    return round(total, 2)
+
+# Build the matchups list
+upcoming_matchups = []
+try:
+    target_week = _guess_next_week()
+    # Box scores expose lineups + projected points
+    box_scores = league.box_scores(week=target_week)
+    for bx in box_scores:
+        home_name = bx.home_team.team_name if getattr(bx, "home_team", None) else None
+        away_name = bx.away_team.team_name if getattr(bx, "away_team", None) else None
+
+        home_players = [_player_row_for_lineup(p) for p in (getattr(bx, "home_lineup", []) or [])]
+        away_players = [_player_row_for_lineup(p) for p in (getattr(bx, "away_lineup", []) or [])]
+
+        home_proj_total = _team_projected_total(home_players)
+        away_proj_total = _team_projected_total(away_players)
+
+        upcoming_matchups.append({
+            "week": target_week,
+            "home": {
+                "team": home_name,
+                "projected_total": home_proj_total,
+                "players": home_players
+            },
+            "away": {
+                "team": away_name,
+                "projected_total": away_proj_total,
+                "players": away_players
+            }
+        })
+except Exception as e:
+    # Non-fatal; just leave upcoming_matchups = []
+    print(f"WARN: Failed to build upcoming matchups: {e}")
+
+
+# ================================
 # ---- Final JSON bundle ----
 # ================================
 bundle = {
@@ -337,6 +452,7 @@ bundle = {
         "team_count": team_count,
     },
     "teams_current": teams_current,   # Team IDs, names, record, PF, PA
+    "upcoming_matchups": upcoming_matchups,
     "history": history,               # Final results for previous seasons (rank, W/L/T, PF, PA)
 }
 
