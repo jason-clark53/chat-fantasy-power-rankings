@@ -438,63 +438,110 @@ except Exception as e:
 
 
 # ================================
-# ---- Full season schedule by week (7 matchups each) ----
+# ---- Full regular-season schedule (all weeks) ----
 # ================================
-# Uses mSchedule to group matchups by matchupPeriodId (week).
-# Output shape:
-#   schedule_weeks = [
-#     {
-#       "week": 1,
-#       "matchups": [
-#         {"home": {"team_id": 1, "name": "Team A"},
-#          "away": {"team_id": 2, "name": "Team B"},
-#          "winner": "HOME"|"AWAY"|"UNDECIDED"}
-#         ...
-#       ]
-#     },
-#     ...
-#   ]
+def build_full_regular_season_schedule():
+    """
+    Returns:
+      [
+        {
+          "week": 1,
+          "matchups": [
+            {
+              "home": {"team_id": 1, "name": "Team A"},
+              "away": {"team_id": 2, "name": "Team B"},
+              "winner": "HOME" | "AWAY" | "UNDECIDED" | None,
+              "home_points": 0.0 | None,
+              "away_points": 0.0 | None
+            }, ...
+          ]
+        }, ...
+      ]
+    """
+    # Map teamId -> team name
+    name_by_id = {t.team_id: t.team_name for t in league.teams}
 
-# Map teamId -> team name for quick lookups
-_team_name_by_id = {t.team_id: t.team_name for t in league.teams}
+    # Figure out how many matchup periods (weeks)
+    max_weeks = None
+    try:
+        max_weeks = getattr(league.settings, "matchup_period_count", None)
+    except Exception:
+        pass
+    if not max_weeks:
+        try:
+            ms = _fetch_view_with_wrapper_then_http("mSettings", YEAR) or {}
+            max_weeks = (
+                (ms.get("settings") or {})
+                .get("scheduleSettings", {})
+                .get("matchupPeriodCount")
+            )
+        except Exception:
+            pass
+    if not max_weeks:
+        max_weeks = 18  # safe fallback
 
-# Pull raw schedule (wrapper first, then HTTP as fallback)
-try:
-    raw_schedule = _fetch_view_with_wrapper_then_http("mSchedule", YEAR) or {}
-except NameError:
-    # If your file doesn't have _fetch_view_with_wrapper_then_http for some reason,
-    # fall back directly to HTTP:
-    base_sched = f"https://fantasy.espn.com/apis/v3/games/ffl/seasons/{YEAR}/segments/0/leagues/{LEAGUE_ID}"
-    raw_schedule = GET(base_sched, params={"view": "mSchedule"}) or {}
+    # Try one-shot schedule pull (preferred)
+    grouped = {}
+    try:
+        raw_schedule = _fetch_view_with_wrapper_then_http("mSchedule", YEAR) or {}
+        for it in (raw_schedule.get("schedule") or []):
+            wk = it.get("matchupPeriodId")
+            home = (it.get("home") or {})
+            away = (it.get("away") or {})
+            hid, aid = home.get("teamId"), away.get("teamId")
+            if wk is None or hid is None or aid is None:
+                continue
+            grouped.setdefault(wk, []).append({
+                "home": {"team_id": hid, "name": name_by_id.get(hid, f"Team {hid}")},
+                "away": {"team_id": aid, "name": name_by_id.get(aid, f"Team {aid}")},
+                "winner": it.get("winner"),  # "HOME" | "AWAY" | "UNDECIDED" | None
+                "home_points": home.get("totalPoints"),
+                "away_points": away.get("totalPoints"),
+            })
+    except Exception:
+        pass
 
-sched_items = (raw_schedule.get("schedule") or []) if isinstance(raw_schedule, dict) else []
+    # Build initial list from whatever we got
+    schedule_weeks = [
+        {"week": wk, "matchups": grouped[wk]}
+        for wk in sorted(grouped.keys())
+    ]
 
-# Group matchups by week
-_by_week = {}
-for it in sched_items:
-    wk = it.get("matchupPeriodId")
-    if wk is None:
-        continue
-    home = it.get("home", {}) or {}
-    away = it.get("away", {}) or {}
-    h_id = home.get("teamId")
-    a_id = away.get("teamId")
-    if h_id is None or a_id is None:
-        # sometimes nulls appear for non-match items; skip
-        continue
+    # Fallback/Fill: per-week scoreboard for any missing weeks
+    present_weeks = {w["week"] for w in schedule_weeks}
+    for wk in range(1, max_weeks + 1):
+        if wk in present_weeks:
+            continue
+        try:
+            games = league.scoreboard(week=wk)
+        except Exception:
+            games = []
+        if not games:
+            # Week might not be published yet; still create an empty shell
+            schedule_weeks.append({"week": wk, "matchups": []})
+            continue
 
-    matchup_row = {
-        "home": {"team_id": h_id, "name": _team_name_by_id.get(h_id, f"Team {h_id}")},
-        "away": {"team_id": a_id, "name": _team_name_by_id.get(a_id, f"Team {a_id}")},
-        "winner": it.get("winner")  # "HOME" | "AWAY" | "UNDECIDED"
-    }
-    _by_week.setdefault(wk, []).append(matchup_row)
+        wk_rows = []
+        for g in games:
+            # Some future weeks may come back with score 0.0 and no winner
+            hid = g.home_team.team_id
+            aid = g.away_team.team_id
+            decided = getattr(g, "winner", None) is not None
+            wk_rows.append({
+                "home": {"team_id": hid, "name": name_by_id.get(hid, f"Team {hid}")},
+                "away": {"team_id": aid, "name": name_by_id.get(aid, f"Team {aid}")},
+                "winner": ("HOME" if g.home_score > g.away_score else "AWAY") if decided else "UNDECIDED",
+                "home_points": float(getattr(g, "home_score", 0.0) or 0.0),
+                "away_points": float(getattr(g, "away_score", 0.0) or 0.0),
+            })
+        schedule_weeks.append({"week": wk, "matchups": wk_rows})
 
-# Normalize into a sorted list of weeks
-schedule_weeks = [
-    {"week": wk, "matchups": _by_week[wk]}
-    for wk in sorted(_by_week.keys())
-]
+    # Sort by week
+    schedule_weeks.sort(key=lambda x: x["week"])
+    return schedule_weeks
+
+# Build the schedule
+regular_season_schedule = build_full_regular_season_schedule()
 
 
 # ================================
@@ -512,7 +559,7 @@ bundle = {
         "team_count": team_count,
     },
     "teams_current": teams_current,   # Team IDs, names, record, PF, PA
-    "schedule_weeks": schedule_weeks,
+    "regular_season_schedule": regular_season_schedule,
     "upcoming_matchups": upcoming_matchups,
     "history": history,               # Final results for previous seasons (rank, W/L/T, PF, PA)
 }
