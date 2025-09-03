@@ -438,6 +438,66 @@ except Exception as e:
 
 
 # ================================
+# ---- Full season schedule by week (7 matchups each) ----
+# ================================
+# Uses mSchedule to group matchups by matchupPeriodId (week).
+# Output shape:
+#   schedule_weeks = [
+#     {
+#       "week": 1,
+#       "matchups": [
+#         {"home": {"team_id": 1, "name": "Team A"},
+#          "away": {"team_id": 2, "name": "Team B"},
+#          "winner": "HOME"|"AWAY"|"UNDECIDED"}
+#         ...
+#       ]
+#     },
+#     ...
+#   ]
+
+# Map teamId -> team name for quick lookups
+_team_name_by_id = {t.team_id: t.team_name for t in league.teams}
+
+# Pull raw schedule (wrapper first, then HTTP as fallback)
+try:
+    raw_schedule = _fetch_view_with_wrapper_then_http("mSchedule", YEAR) or {}
+except NameError:
+    # If your file doesn't have _fetch_view_with_wrapper_then_http for some reason,
+    # fall back directly to HTTP:
+    base_sched = f"https://fantasy.espn.com/apis/v3/games/ffl/seasons/{YEAR}/segments/0/leagues/{LEAGUE_ID}"
+    raw_schedule = GET(base_sched, params={"view": "mSchedule"}) or {}
+
+sched_items = (raw_schedule.get("schedule") or []) if isinstance(raw_schedule, dict) else []
+
+# Group matchups by week
+_by_week = {}
+for it in sched_items:
+    wk = it.get("matchupPeriodId")
+    if wk is None:
+        continue
+    home = it.get("home", {}) or {}
+    away = it.get("away", {}) or {}
+    h_id = home.get("teamId")
+    a_id = away.get("teamId")
+    if h_id is None or a_id is None:
+        # sometimes nulls appear for non-match items; skip
+        continue
+
+    matchup_row = {
+        "home": {"team_id": h_id, "name": _team_name_by_id.get(h_id, f"Team {h_id}")},
+        "away": {"team_id": a_id, "name": _team_name_by_id.get(a_id, f"Team {a_id}")},
+        "winner": it.get("winner")  # "HOME" | "AWAY" | "UNDECIDED"
+    }
+    _by_week.setdefault(wk, []).append(matchup_row)
+
+# Normalize into a sorted list of weeks
+schedule_weeks = [
+    {"week": wk, "matchups": _by_week[wk]}
+    for wk in sorted(_by_week.keys())
+]
+
+
+# ================================
 # ---- Final JSON bundle ----
 # ================================
 bundle = {
@@ -452,6 +512,7 @@ bundle = {
         "team_count": team_count,
     },
     "teams_current": teams_current,   # Team IDs, names, record, PF, PA
+    "schedule_weeks": schedule_weeks,
     "upcoming_matchups": upcoming_matchups,
     "history": history,               # Final results for previous seasons (rank, W/L/T, PF, PA)
 }
