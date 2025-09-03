@@ -561,7 +561,7 @@ bundle = {
     "teams_current": teams_current,   # Team IDs, names, record, PF, PA
     "regular_season_schedule": regular_season_schedule,
     "upcoming_matchups": upcoming_matchups,
-    "history": history,               # Final results for previous seasons (rank, W/L/T, PF, PA)
+    #"history": history,               # Final results for previous seasons (rank, W/L/T, PF, PA)
 }
 
 # ================================
