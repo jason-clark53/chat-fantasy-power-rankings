@@ -545,6 +545,113 @@ regular_season_schedule = build_full_regular_season_schedule()
 
 
 # ================================
+# ---- Previous week matchups (teams, scores, players) ----
+# ================================
+def _last_completed_week():
+    """
+    Find the latest week that has at least one decided game.
+    Falls back to 18 if matchup_period_count is missing.
+    """
+    try:
+        max_weeks = getattr(league.settings, "matchup_period_count", None) or 18
+    except Exception:
+        max_weeks = 18
+
+    last_done = 0
+    for wk in range(1, max_weeks + 1):
+        try:
+            games = league.scoreboard(week=wk)
+        except Exception:
+            continue
+        if games and any(getattr(g, "winner", None) is not None for g in games):
+            last_done = wk
+    return last_done
+
+def _simplify_player(p):
+    """Return just what we need for player rows."""
+    def _f(v):
+        try:
+            return float(v)
+        except Exception:
+            return 0.0
+
+    return {
+        "name": getattr(p, "name", None),
+        "nfl_team": getattr(p, "proTeam", None),           # e.g., KC
+        "position": getattr(p, "position", None),          # e.g., RB
+        "lineup_slot": getattr(p, "slot_position", None),  # e.g., RB, FLEX, BE
+        "points": _f(getattr(p, "points", 0.0)),
+        "projected_points": _f(getattr(p, "projected_points", 0.0)),
+    }
+
+def build_previous_week_matchups():
+    """
+    Returns:
+      {
+        "week": 7,
+        "matchups": [
+          {
+            "home": {"team_id": 1, "name": "Team A"},
+            "away": {"team_id": 2, "name": "Team B"},
+            "home_score": 123.4,
+            "away_score": 118.9,
+            "winner": "HOME" | "AWAY" | "TIE",
+            "home_players": [ {player row...}, ... ],
+            "away_players": [ {player row...}, ... ]
+          },
+          ...
+        ]
+      }
+    """
+    week = _last_completed_week()
+    if week == 0:
+        return {"week": None, "matchups": []}
+
+    # Pull box scores to get players & roles
+    try:
+        boxes = league.box_score(week=week)
+    except Exception:
+        boxes = []
+
+    out = []
+    for b in boxes:
+        # Scores & winner
+        hs = float(getattr(b, "home_score", 0.0) or 0.0)
+        as_ = float(getattr(b, "away_score", 0.0) or 0.0)
+        winner = "TIE"
+        if hs > as_:
+            winner = "HOME"
+        elif as_ > hs:
+            winner = "AWAY"
+
+        # Team identifiers
+        home_team = getattr(b, "home_team", None)
+        away_team = getattr(b, "away_team", None)
+
+        out.append({
+            "home": {
+                "team_id": getattr(home_team, "team_id", None),
+                "name": getattr(home_team, "team_name", None),
+            },
+            "away": {
+                "team_id": getattr(away_team, "team_id", None),
+                "name": getattr(away_team, "team_name", None),
+            },
+            "home_score": round(hs, 2),
+            "away_score": round(as_, 2),
+            "winner": winner,
+            # Every player with slot (RB/WR/FLEX/BE/etc) and points
+            "home_players": [_simplify_player(p) for p in (getattr(b, "home_lineup", []) or [])],
+            "away_players": [_simplify_player(p) for p in (getattr(b, "away_lineup", []) or [])],
+        })
+
+    return {"week": week, "matchups": out}
+
+# Build it now
+previous_week_matchups = build_previous_week_matchups()
+
+
+# ================================
 # ---- Final JSON bundle ----
 # ================================
 bundle = {
@@ -561,6 +668,8 @@ bundle = {
     "teams_current": teams_current,   # Team IDs, names, record, PF, PA
     "regular_season_schedule": regular_season_schedule,
     "upcoming_matchups": upcoming_matchups,
+    "previous_week_matchups": previous_week_matchups,
+
     #"history": history,               # Final results for previous seasons (rank, W/L/T, PF, PA)
 }
 
