@@ -663,7 +663,8 @@ def build_previous_week_matchups(league, year, league_id):
 
     return {"week": prev_week, "matchups": matchups}
 
-
+# Build previous-week matchup snapshot before assembling the bundle
+previous_week_matchups = build_previous_week_matchups(league, YEAR, LEAGUE_ID)
 
 # ================================
 # ---- Final JSON bundle ----
