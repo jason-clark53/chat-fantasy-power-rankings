@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at_utc": "2025-09-09T15:22:22Z",
+    "generated_at_utc": "2025-09-09T22:22:20Z",
     "source": "espn_api + leagueHistory"
   },
   "league": {
@@ -1576,7 +1576,7 @@
       "week": 2,
       "home": {
         "team": "In Aaron Glenn we trust",
-        "projected_total": 107.7,
+        "projected_total": 117.94,
         "players": [
           {
             "name": "Nico Collins",
@@ -1593,7 +1593,7 @@
           {
             "name": "George Kittle",
             "position": "TE",
-            "lineup_slot": "TE",
+            "lineup_slot": "BE",
             "projected_points": 0.0
           },
           {
@@ -1605,7 +1605,7 @@
           {
             "name": "Isiah Pacheco",
             "position": "RB",
-            "lineup_slot": "RB",
+            "lineup_slot": "BE",
             "projected_points": 10.9
           },
           {
@@ -1617,7 +1617,7 @@
           {
             "name": "J.K. Dobbins",
             "position": "RB",
-            "lineup_slot": "BE",
+            "lineup_slot": "RB",
             "projected_points": 11.44
           },
           {
@@ -1641,7 +1641,7 @@
           {
             "name": "Hunter Henry",
             "position": "TE",
-            "lineup_slot": "BE",
+            "lineup_slot": "TE",
             "projected_points": 9.7
           },
           {
