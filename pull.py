@@ -437,9 +437,6 @@ except Exception as e:
     print(f"WARN: Failed to build upcoming matchups: {e}")
 
 
-# ================================
-# ---- Full regular-season schedule (all weeks) ----
-# ================================
 def build_full_regular_season_schedule():
     """
     Returns:
@@ -450,7 +447,7 @@ def build_full_regular_season_schedule():
             {
               "home": {"team_id": 1, "name": "Team A"},
               "away": {"team_id": 2, "name": "Team B"},
-              "winner": "HOME" | "AWAY" | "UNDECIDED" | None,
+              "winner": "HOME" | "AWAY" | "TIE" | "UNDECIDED",
               "home_points": 0.0 | None,
               "away_points": 0.0 | None
             }, ...
@@ -458,23 +455,29 @@ def build_full_regular_season_schedule():
         }, ...
       ]
     """
+    def _decide_winner_from_points(hp, ap):
+        if hp is None or ap is None:
+            return "UNDECIDED"
+        try:
+            hp = float(hp); ap = float(ap)
+        except Exception:
+            return "UNDECIDED"
+        if abs(hp - ap) < 1e-9:
+            return "TIE"
+        return "HOME" if hp > ap else "AWAY"
+
     # Map teamId -> team name
     name_by_id = {t.team_id: t.team_name for t in league.teams}
 
     # Figure out how many matchup periods (weeks)
-    max_weeks = None
     try:
         max_weeks = getattr(league.settings, "matchup_period_count", None)
     except Exception:
-        pass
+        max_weeks = None
     if not max_weeks:
         try:
             ms = _fetch_view_with_wrapper_then_http("mSettings", YEAR) or {}
-            max_weeks = (
-                (ms.get("settings") or {})
-                .get("scheduleSettings", {})
-                .get("matchupPeriodCount")
-            )
+            max_weeks = ((ms.get("settings") or {}).get("scheduleSettings", {}) or {}).get("matchupPeriodCount")
         except Exception:
             pass
     if not max_weeks:
@@ -491,21 +494,26 @@ def build_full_regular_season_schedule():
             hid, aid = home.get("teamId"), away.get("teamId")
             if wk is None or hid is None or aid is None:
                 continue
+
+            hp = home.get("totalPoints")
+            ap = away.get("totalPoints")
+            # ESPN sometimes leaves "winner" as UNDECIDED—derive it from points if possible
+            winner = _decide_winner_from_points(hp, ap)
+            if winner == "UNDECIDED":
+                winner = it.get("winner") or "UNDECIDED"
+
             grouped.setdefault(wk, []).append({
                 "home": {"team_id": hid, "name": name_by_id.get(hid, f"Team {hid}")},
                 "away": {"team_id": aid, "name": name_by_id.get(aid, f"Team {aid}")},
-                "winner": it.get("winner"),  # "HOME" | "AWAY" | "UNDECIDED" | None
-                "home_points": home.get("totalPoints"),
-                "away_points": away.get("totalPoints"),
+                "winner": winner,
+                "home_points": (float(hp) if isinstance(hp, (int, float)) else None),
+                "away_points": (float(ap) if isinstance(ap, (int, float)) else None),
             })
     except Exception:
         pass
 
     # Build initial list from whatever we got
-    schedule_weeks = [
-        {"week": wk, "matchups": grouped[wk]}
-        for wk in sorted(grouped.keys())
-    ]
+    schedule_weeks = [{"week": wk, "matchups": grouped[wk]} for wk in sorted(grouped.keys())]
 
     # Fallback/Fill: per-week scoreboard for any missing weeks
     present_weeks = {w["week"] for w in schedule_weeks}
@@ -517,28 +525,30 @@ def build_full_regular_season_schedule():
         except Exception:
             games = []
         if not games:
-            # Week might not be published yet; still create an empty shell
             schedule_weeks.append({"week": wk, "matchups": []})
             continue
 
         wk_rows = []
         for g in games:
-            # Some future weeks may come back with score 0.0 and no winner
-            hid = g.home_team.team_id
-            aid = g.away_team.team_id
+            hs = float(getattr(g, "home_score", 0.0) or 0.0)
+            as_ = float(getattr(g, "away_score", 0.0) or 0.0)
             decided = getattr(g, "winner", None) is not None
+            if decided:
+                winner = "HOME" if hs > as_ else ("AWAY" if as_ > hs else "TIE")
+            else:
+                winner = _decide_winner_from_points(hs, as_)  # usually UNDECIDED if both 0.0 pre-game
             wk_rows.append({
-                "home": {"team_id": hid, "name": name_by_id.get(hid, f"Team {hid}")},
-                "away": {"team_id": aid, "name": name_by_id.get(aid, f"Team {aid}")},
-                "winner": ("HOME" if g.home_score > g.away_score else "AWAY") if decided else "UNDECIDED",
-                "home_points": float(getattr(g, "home_score", 0.0) or 0.0),
-                "away_points": float(getattr(g, "away_score", 0.0) or 0.0),
+                "home": {"team_id": g.home_team.team_id, "name": name_by_id.get(g.home_team.team_id)},
+                "away": {"team_id": g.away_team.team_id, "name": name_by_id.get(g.away_team.team_id)},
+                "winner": winner,
+                "home_points": hs,
+                "away_points": as_,
             })
         schedule_weeks.append({"week": wk, "matchups": wk_rows})
 
-    # Sort by week
     schedule_weeks.sort(key=lambda x: x["week"])
     return schedule_weeks
+
 
 # Build the schedule
 regular_season_schedule = build_full_regular_season_schedule()
