@@ -545,128 +545,6 @@ regular_season_schedule = build_full_regular_season_schedule()
 
 
 # ================================
-# ---- Previous week matchups (actuals) ----
-# ================================
-def build_previous_week_matchups(league, year, league_id):
-    """
-    Returns a JSON-ready dict:
-      {
-        "week": <int|None>,
-        "matchups": [
-          {
-            "home": {"team_id": int, "name": str},
-            "away": {"team_id": int, "name": str},
-            "home_score": float,
-            "away_score": float,
-            "winner": "HOME" | "AWAY" | "TIE",
-            "home_players": [ {name, nfl_team, position, lineup_slot, points}, ... ],
-            "away_players": [ ... ]
-          }, ...
-        ]
-      }
-
-    If no prior week has completed (e.g., preseason), returns {"week": None, "matchups": []}.
-    """
-    # --- find the "previous" week ---
-    # Try mSettings current matchup period; previous = current - 1
-    prev_week = None
-    try:
-        base = f"https://fantasy.espn.com/apis/v3/games/ffl/seasons/{year}/segments/0/leagues/{league_id}"
-        raw = GET(base, params={"view": "mSettings"}) or {}
-        status = raw.get("status") or {}
-        cur = status.get("currentMatchupPeriod") or status.get("currentMatchupPeriodId")
-        if isinstance(cur, int) and cur > 1:
-            prev_week = cur - 1
-    except Exception:
-        prev_week = None
-
-    # If that failed (or cur==1), scan to find the last decided week
-    if prev_week is None:
-        try:
-            max_weeks = getattr(league.settings, "matchup_period_count", None) or 18
-        except Exception:
-            max_weeks = 18
-
-        last_done = 0
-        for wk in range(1, max_weeks + 1):
-            try:
-                games = league.scoreboard(week=wk)
-            except Exception:
-                games = []
-            if games and any(getattr(g, "winner", None) is not None for g in games):
-                last_done = wk
-        prev_week = last_done if last_done > 0 else None
-
-    # No completed week yet
-    if not prev_week:
-        return {"week": None, "matchups": []}
-
-    # --- helpers ---
-    def _f(v):
-        try:
-            return float(v)
-        except Exception:
-            return 0.0
-
-    def _player_row(p):
-        return {
-            "name": getattr(p, "name", None),
-            "nfl_team": getattr(p, "proTeam", None),
-            "position": getattr(p, "position", None),
-            "lineup_slot": getattr(p, "slot_position", None),  # RB/WR/FLEX/BENCH/etc
-            "points": _f(getattr(p, "points", 0.0)),
-        }
-
-    # --- pull box scores (actuals) for prev_week ---
-    try:
-        boxes = league.box_score(week=prev_week)
-    except Exception:
-        try:
-            # some espn_api versions expose box_scores instead
-            boxes = league.box_scores(week=prev_week)
-        except Exception:
-            boxes = []
-
-    matchups = []
-    for b in boxes:
-        home_team = getattr(b, "home_team", None)
-        away_team = getattr(b, "away_team", None)
-
-        # Team names/ids
-        home_id = getattr(home_team, "team_id", None)
-        home_name = getattr(home_team, "team_name", None)
-        away_id = getattr(away_team, "team_id", None)
-        away_name = getattr(away_team, "team_name", None)
-
-        # Totals (actual points)
-        hs = _f(getattr(b, "home_score", 0.0))
-        as_ = _f(getattr(b, "away_score", 0.0))
-        winner = "TIE"
-        if hs > as_:
-            winner = "HOME"
-        elif as_ > hs:
-            winner = "AWAY"
-
-        # Player rows with lineup slots and actual points
-        home_players = [_player_row(p) for p in (getattr(b, "home_lineup", []) or [])]
-        away_players = [_player_row(p) for p in (getattr(b, "away_lineup", []) or [])]
-
-        matchups.append({
-            "home": {"team_id": home_id, "name": home_name},
-            "away": {"team_id": away_id, "name": away_name},
-            "home_score": round(hs, 2),
-            "away_score": round(as_, 2),
-            "winner": winner,
-            "home_players": home_players,
-            "away_players": away_players,
-        })
-
-    return {"week": prev_week, "matchups": matchups}
-
-# Build previous-week matchup snapshot before assembling the bundle
-previous_week_matchups = build_previous_week_matchups(league, YEAR, LEAGUE_ID)
-
-# ================================
 # ---- Final JSON bundle ----
 # ================================
 bundle = {
@@ -683,8 +561,6 @@ bundle = {
     "teams_current": teams_current,   # Team IDs, names, record, PF, PA
     "regular_season_schedule": regular_season_schedule,
     "upcoming_matchups": upcoming_matchups,
-    "previous_week_matchups": previous_week_matchups,
-
     #"history": history,               # Final results for previous seasons (rank, W/L/T, PF, PA)
 }
 
